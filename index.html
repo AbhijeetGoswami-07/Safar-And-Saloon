@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safar & Saloon | Dual Retro Radio — Bus Driver & Deluxe Saloon</title>
+
+  <meta name="description" content="Experience the dual nostalgic Indian radio: The Midnight Highway Bus Driver Cabin and The Sunday Morning Deluxe Barber Shop. 90s & 2000s Bollywood retro cassettes, interactive pressure horns, scissor ASMR, and continuous nostalgic playlists.">
+  <meta name="keywords" content="bus driver playlist, deluxe saloon music, 90s hindi songs, bus driver website, saloon playlist, kumar sanu, alka yagnik, retro bollywood radio, indian highway radio, nh 48 songs">
+  <meta name="theme-color" content="#090d16">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ember: '#f59e0b',
+            saloonTeal: '#14b8a6',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
+
+  <!-- ACTIVE YOUTUBE API BRIDGE (Hidden, low opacity, out of direct view) -->
+  <div style="position:fixed;bottom:0;right:0;width:200px;height:200px;opacity:0.001;pointer-events:none;z-index:-10;overflow:hidden;">
+    <div id="youtubeBridge"></div>
+  </div>
+
+  <!-- HIGH-PERFORMANCE CANVAS (3D Night Highway & Deluxe Saloon Mirror) -->
+  <canvas id="sceneCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- Soft Vignette & Screen Depth Layer -->
+  <div class="fixed inset-0 pointer-events-none z-[1] bg-radial-gradient from-transparent via-black/20 to-black/75"></div>
+
+  <!-- Floating Toast Notification for Horn Hook -->
+  <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-2">
+    <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-500 text-zinc-950 font-bold text-xs shadow-2xl backdrop-blur-md border border-amber-400">
+      <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>
+      <span id="toastText">Playing Song Hook on PA Truck Horn</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+   * TOP HEADER NAVIGATION & MASTER DUAL-MODE TOGGLE
+   * ============================================================ -->
+  <header class="relative z-20 w-full px-4 sm:px-8 py-4 sm:py-5 flex flex-wrap items-center justify-between gap-3">
+
+    <!-- Left: Brand Logo & Cultural Identity -->
+    <div class="brand-badge">
+      <div class="brand-icon-box">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="2"></circle>
+          <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col pr-1">
+        <div class="flex items-center gap-2">
+          <span class="font-display text-sm sm:text-base font-bold tracking-tight text-white drop-shadow">Safar & Saloon</span>
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-emerald-400/30 animate-pulse"></span>
+        </div>
+        <span class="text-[10px] font-mono tracking-wider text-amber-300/90 font-semibold uppercase">Dual Retro Radio Experience</span>
+      </div>
+    </div>
+
+    <!-- Center: The Master Tactile Switcher -->
+    <div class="order-3 sm:order-2 w-full sm:w-auto flex justify-center mt-2 sm:mt-0">
+      <div class="mode-switch-wrapper">
+        <div class="mode-switch-slider"></div>
+        <button id="modeBtnDriver" type="button" class="mode-btn driver-active" aria-label="Switch to Bus Driver Mode">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 6v6"></path>
+            <path d="M16 6v6"></path>
+            <rect x="4" y="3" width="16" height="15" rx="3"></rect>
+            <path d="M4 11h16"></path>
+            <path d="M7 18v2"></path>
+            <path d="M17 18v2"></path>
+          </svg>
+          <span>Bus Driver</span>
+        </button>
+        <button id="modeBtnSaloon" type="button" class="mode-btn" aria-label="Switch to Saloon Man Mode">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+            <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+          </svg>
+          <span>Deluxe Saloon</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Consolidated Settings Gear Button -->
+    <div class="order-2 sm:order-3 flex items-center gap-2">
+      <button id="settingsGearBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs font-semibold flex items-center gap-2 hover:border-amber-400/40" title="Settings, Mixer, Sleep Timer & Shortcuts">
+        <svg class="w-4 h-4 text-zinc-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span class="hidden sm:inline">Settings</span>
+        <span id="activeTimerBadge" class="hidden text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">30m</span>
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ============================================================
+   * HERO CENTER STAGE (COMPACT HIGH PLACEMENT TO KEEP ART VISIBLE)
+   * ============================================================ -->
+  <main class="relative z-10 flex flex-col items-center justify-start px-4 text-center select-none pt-0 pointer-events-none">
+
+    <!-- Dynamic Hero Headline (Cleanly positioned high so the scene is completely visible) -->
+    <h1 id="heroTitle" class="hero-title-headline font-big-shoulders text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-widest leading-none drop-shadow-xl mt-0.5 mb-0 select-none">
+      BUS DRIVER
+    </h1>
+
+  </main>
+
+  <!-- ============================================================
+   * STATIONS BAR & UNIVERSAL CASSETTE / TRANSISTOR DOCK
+   * ============================================================ -->
+  <footer class="relative z-30 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 flex flex-col items-center gap-2.5">
+
+    <!-- Mode-Specific Action Soundboards (Positioned lower so the shop and road are completely unobstructed) -->
+    <!-- 1. BUS DRIVER ACTIONS CONTAINER -->
+    <div id="driverActions" class="w-full flex flex-wrap items-center justify-center gap-2 pointer-events-auto">
+      <!-- High-Pressure Indian Musical Truck Air Horn -->
+      <button id="bigHornBtn" type="button" class="tactile-action-btn horn-giant-btn text-xs py-2 px-4 shadow-lg group" title="Blow High-Pressure Indian Musical Truck Horn (Press 'H')">
+        <svg class="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+        <span class="font-semibold" id="blowHornBtnLabel">BLOW HORN (H)</span>
+      </button>
+
+      <!-- Auto Song Hook Horn Toggle -->
+      <button id="autoHornToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Auto-blast the song's melodic hook on PA horn during playback">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 14 14"></polyline>
+        </svg>
+        <span>Auto Horn Hook</span>
+        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+      </button>
+
+      <!-- Rain & Wipers Toggle -->
+      <button id="rainWiperToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Highway Rain & Windshield Wipers">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+          <path d="M11 19l-2 3"></path>
+          <path d="M15 19l-2 3"></path>
+        </svg>
+        <span>Rain & Wipers</span>
+        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+      </button>
+
+      <!-- Engine Rumble -->
+      <button id="engineHumToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Heavy Diesel Engine Rumble">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 14 14"></polyline>
+        </svg>
+        <span>Engine Rumble</span>
+        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+      </button>
+    </div>
+
+    <!-- 2. SALOON MAN ACTIONS CONTAINER (Initially Hidden) -->
+    <div id="saloonActions" class="w-full flex flex-wrap items-center justify-center gap-2 pointer-events-auto hidden">
+      <!-- Scissors Snip -->
+      <button id="scissorSnipBtn" type="button" class="tactile-action-btn text-xs py-2 px-4 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-400/40 text-white shadow-lg" title="Snip Hair Cutting Scissors (Press 'H')">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+          <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+          <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+        </svg>
+        <span class="font-semibold">Scissors (H)</span>
+      </button>
+
+      <!-- Spray Bottle Mist -->
+      <button id="sprayMistBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Spritz Water Bottle Mist">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+        </svg>
+        <span>Water Mist</span>
+      </button>
+
+      <!-- Champi Vibrator -->
+      <button id="champiVibratorBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Head Massage Machine Vibrator">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>Head Massage</span>
+        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+      </button>
+
+      <!-- Ceiling Fan -->
+      <button id="ceilingFanBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Vintage Ceiling Fan">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.7 7.7a2.5 2.5 0 1 1 3.5 3.5L18 14H6l-3.2-2.8a2.5 2.5 0 1 1 3.5-3.5L9 10h6z"></path>
+        </svg>
+        <span>Ceiling Fan</span>
+        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+      </button>
+    </div>
+
+    <!-- Stations Bar (with dark frosted backdrop tray for crystal-clear road visibility) -->
+    <div class="w-full flex items-center justify-start sm:justify-center gap-2 overflow-x-auto py-1.5 px-3 rounded-full bg-zinc-950/75 backdrop-blur-md border border-white/10 shadow-xl no-scrollbar" id="stationsNav">
+      <!-- Dynamically filled with station pills -->
+    </div>
+      <!-- Dynamically filled with station pills -->
+    </div>
+
+    <!-- Main Universal Audio Deck Frame -->
+    <div class="audio-deck-frame w-full p-3.5 sm:p-4 flex flex-col gap-3">
+
+      <!-- Top Row: Cover, Track Info, Controls -->
+      <div class="flex items-center gap-3 sm:gap-4">
+
+        <!-- Cassette Disc Artwork (Click to Play/Pause) -->
+        <div id="cassetteDisc" class="cassette-disc" title="Click to Play / Pause">
+          <div id="discArtwork" class="disc-artwork" style="background-image: url('https://img.youtube.com/vi/fvwyPGBOEgY/hqdefault.jpg');"></div>
+          <div class="disc-center-hole"></div>
+        </div>
+
+        <!-- Track Title & Metadata -->
+        <div class="flex-1 min-w-0 flex flex-col justify-center">
+          <div class="flex items-center gap-2">
+            <span id="trackTag" class="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-amber-300 font-bold shrink-0">
+              Midnight Vibe
+            </span>
+            <div id="eqVisualizer" class="eq-container">
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
+            </div>
+          </div>
+          <div id="trackTitle" class="text-xs sm:text-sm font-semibold text-white truncate leading-tight mt-0.5">
+            Dil Ke Badle Sanam
+          </div>
+          <div class="text-[11px] text-zinc-400 truncate">
+            <span id="trackArtist">Udit Narayan, Alka Yagnik</span> • <span id="trackMovie">Kyun Ki</span>
+          </div>
+        </div>
+
+        <!-- Player Buttons (Prev, Play/Pause, Next) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <!-- Shuffle -->
+          <button id="shuffleBtn" type="button" class="p-1.5 text-zinc-400 hover:text-white transition-colors" title="Toggle Shuffle">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+          </button>
+
+          <!-- Prev -->
+          <button id="prevBtn" type="button" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-transform active:scale-95" title="Previous Track (Left Arrow)">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+
+          <!-- Big Glowing Play / Pause -->
+          <button id="playBtn" type="button" class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 text-zinc-950 flex items-center justify-center shadow-md shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all" title="Play / Pause (Spacebar)">
+            <svg id="playIcon" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+              <polygon points="6,4 20,12 6,20"/>
+            </svg>
+          </button>
+
+          <!-- Next -->
+          <button id="nextBtn" type="button" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-transform active:scale-95" title="Next Track (Right Arrow)">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+
+          <!-- Repeat -->
+          <button id="repeatBtn" type="button" class="p-1.5 text-zinc-400 hover:text-white transition-colors" title="Toggle Repeat">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Bottom Row: Progress Bar, Volume, Playlist & Custom Song Buttons -->
+      <div class="flex items-center gap-3 pt-1 border-t border-white/5">
+
+        <!-- Time Current -->
+        <span id="timeCurrent" class="text-[10px] font-mono text-zinc-500 w-8 text-right shrink-0">0:00</span>
+
+        <!-- Seek Progress Bar -->
+        <div id="progressTrack" class="progress-track flex-1" role="slider" aria-label="Seek track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <!-- Time Total -->
+        <span id="timeDuration" class="text-[10px] font-mono text-zinc-500 w-8 shrink-0">0:00</span>
+
+        <!-- Volume Control -->
+        <div class="hidden sm:flex items-center gap-2 pl-2 border-l border-white/10">
+          <button id="muteBtn" type="button" class="text-zinc-400 hover:text-white transition-colors" title="Toggle Mute (Press 'M')">
+            <svg id="volumeIcon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+          </button>
+          <input id="volumeSlider" type="range" min="0" max="100" value="80" class="w-16">
+        </div>
+
+        <!-- Souvenir Ticket & Saloon Receipt Button -->
+        <button id="openTicketBtn" type="button" class="py-1 px-2.5 sm:px-3 rounded-full bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-200 flex items-center gap-1.5 shrink-0 transition-colors" title="Generate Travel Ticket or Saloon Receipt">
+          <svg class="w-3.5 h-3.5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
+            <path d="M13 5v2"></path>
+            <path d="M13 17v2"></path>
+            <path d="M13 11v2"></path>
+          </svg>
+          <span class="hidden md:inline">Receipt</span>
+        </button>
+
+        <!-- Open Playlist Button -->
+        <button id="openPlaylistBtn" type="button" class="py-1 px-3 rounded-full bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-200 flex items-center gap-1.5 shrink-0 transition-colors" title="View Full Station Library">
+          <svg class="w-3 h-3 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="hidden md:inline">Library</span>
+        </button>
+
+        <!-- Custom YouTube Video Input Button -->
+        <button id="openCustomSongBtn" type="button" class="py-1 px-2.5 rounded-full bg-white/5 hover:bg-white/10 text-xs text-zinc-400 hover:text-white shrink-0 transition-colors" title="Tune Any Custom YouTube Video URL">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Playback Shortcuts Ribbon Under the Audio Deck (Clean borderless inline shortcuts) -->
+    <div class="w-full flex items-center justify-center gap-x-4 gap-y-1.5 flex-wrap text-[11px] text-zinc-400 font-medium px-2 pt-1 select-none">
+      <div class="inline-flex items-center gap-1.5">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">Space</kbd>
+        <span class="text-zinc-300">Play / Pause</span>
+      </div>
+      <span class="text-zinc-600 hidden sm:inline">•</span>
+      <div class="inline-flex items-center gap-1.5">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">A</kbd>
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">D</kbd>
+        <span class="text-zinc-300">Prev / Next</span>
+      </div>
+      <span class="text-zinc-600 hidden sm:inline">•</span>
+      <div class="inline-flex items-center gap-1.5">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">H</kbd>
+        <span id="shortcutHornLabel" class="text-zinc-300">BLOW HORN</span>
+      </div>
+      <span class="text-zinc-600 hidden sm:inline">•</span>
+      <div class="inline-flex items-center gap-1.5">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">M</kbd>
+        <span class="text-zinc-300">Mute</span>
+      </div>
+      <span class="text-zinc-600 hidden sm:inline">•</span>
+      <div class="inline-flex items-center gap-1.5">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-zinc-200 font-mono text-[10px] border border-white/10 shadow-sm">S</kbd>
+        <span class="text-zinc-300">Switch Mode</span>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- ============================================================
+   * MODAL 1: FULL SEARCHABLE PLAYLIST DRAWER
+   * ============================================================ -->
+  <div id="playlistDrawer" class="drawer-overlay" role="dialog" aria-modal="true" aria-labelledby="playlistDrawerTitle">
+    <div class="drawer-card">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div>
+          <h2 id="playlistDrawerTitle" class="font-display text-xl font-bold text-white">Station Library</h2>
+          <p class="text-xs text-zinc-400">Select any track to stream instantly</p>
+        </div>
+        <button id="closePlaylistBtn" type="button" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-300 text-lg flex items-center justify-center transition-colors">&times;</button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="my-3.5 relative">
+        <svg class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="searchSongInput" type="text" placeholder="Search by song, singer, or movie name..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-zinc-900/80 border border-white/10 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400">
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div id="playlistItemsList" class="flex flex-col gap-1 max-h-[55vh] overflow-y-auto pr-1">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+   * MODAL 2: CONSOLIDATED SETTINGS & CALIBRATION MODAL (Opened by Gear Icon)
+   * ============================================================ -->
+  <div id="settingsModal" class="drawer-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="drawer-card max-w-lg">
+      <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
+          <div>
+            <h2 id="settingsModalTitle" class="font-display text-lg font-bold text-white">Dashboard Settings & Calibration</h2>
+            <p class="text-[11px] text-zinc-400">Sleep timer, ambient audio balance, and keyboard shortcuts</p>
+          </div>
+        </div>
+        <button id="closeSettingsBtn" type="button" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-300 text-lg flex items-center justify-center transition-colors">&times;</button>
+      </div>
+
+      <div class="py-4 space-y-4">
+        <!-- 1. Sleep Timer Section -->
+        <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span class="text-xs font-semibold text-white">Audio Sleep Timer</span>
+            </div>
+            <span id="settingsTimerStatus" class="text-[11px] font-mono text-zinc-400">Timer Disabled</span>
+          </div>
+          <div class="grid grid-cols-5 gap-1.5" id="sleepTimerOptions">
+            <button type="button" data-minutes="0" class="sleep-pill active py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">Off</button>
+            <button type="button" data-minutes="15" class="sleep-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">15m</button>
+            <button type="button" data-minutes="30" class="sleep-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">30m</button>
+            <button type="button" data-minutes="45" class="sleep-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">45m</button>
+            <button type="button" data-minutes="60" class="sleep-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">60m</button>
+          </div>
+        </div>
+
+        <!-- 2. Highway Time of Day & Headlight Atmosphere Sync -->
+        <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path><path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path><path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+              </svg>
+              <span class="text-xs font-semibold text-white">Highway Time & Headlights</span>
+            </div>
+            <span id="settingsTimeStatus" class="text-[11px] font-mono text-zinc-400">Real-Time Sync (Auto)</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5" id="timeOfDayOptions">
+            <button type="button" data-time="auto" class="time-pill active py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">Real-Time</button>
+            <button type="button" data-time="day" class="time-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">Daylight</button>
+            <button type="button" data-time="sunset" class="time-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">Sunset</button>
+            <button type="button" data-time="night" class="time-pill py-1.5 px-2 rounded-lg text-xs font-medium border border-white/10 bg-white/5 text-zinc-300 hover:text-white transition-all text-center">Night (Glow)</button>
+          </div>
+        </div>
+
+        <!-- 3. Ambient Audio Mixer Section -->
+        <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-3">
+          <div class="flex items-center gap-2 mb-1">
+            <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+            </svg>
+            <span class="text-xs font-semibold text-white">Atmospheric Audio Balance</span>
+          </div>
+
+          <!-- SFX Volume -->
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs text-zinc-300">Horn Hook & Scissors (SFX)</span>
+            <input id="sfxVolSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-36">
+          </div>
+
+          <!-- Rain Volume -->
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs text-zinc-300">Windshield Rain & Mist</span>
+            <input id="rainVolSlider" type="range" min="0" max="1" step="0.05" value="0.35" class="w-36">
+          </div>
+
+          <!-- Engine Rumble -->
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs text-zinc-300">Heavy Diesel Engine Rumble</span>
+            <input id="engineVolSlider" type="range" min="0" max="1" step="0.05" value="0.25" class="w-36">
+          </div>
+
+          <!-- Fan Drone -->
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs text-zinc-300">Saloon Ceiling Fan Hum</span>
+            <input id="fanVolSlider" type="range" min="0" max="1" step="0.05" value="0.3" class="w-36">
+          </div>
+        </div>
+
+        <!-- 3. Keyboard Shortcuts Reference -->
+        <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2">
+          <div class="flex items-center gap-2 mb-1">
+            <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="M6 8h.001"></path><path d="M10 8h.001"></path><path d="M14 8h.001"></path><path d="M18 8h.001"></path>
+              <path d="M8 12h.001"></path><path d="M12 12h.001"></path><path d="M16 12h.001"></path>
+              <path d="M7 16h10"></path>
+            </svg>
+            <span class="text-xs font-semibold text-white">Keyboard Shortcuts</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-zinc-300 pt-1">
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Play / Pause</span>
+              <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">Space</kbd>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Previous Track</span>
+              <div class="flex items-center gap-1">
+                <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">A</kbd>
+                <span class="text-[10px] text-zinc-500">/</span>
+                <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">←</kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Next Track</span>
+              <div class="flex items-center gap-1">
+                <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">D</kbd>
+                <span class="text-[10px] text-zinc-500">/</span>
+                <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">→</kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Hook Horn / Scissors</span>
+              <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">H</kbd>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Mute Audio</span>
+              <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">M</kbd>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-white/5">
+              <span class="text-zinc-400">Switch Mode</span>
+              <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">S</kbd>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+   * MODAL 3: CUSTOM YOUTUBE SONG URL
+   * ============================================================ -->
+  <div id="customSongModal" class="drawer-overlay" role="dialog" aria-modal="true" aria-labelledby="customSongTitle">
+    <div class="drawer-card max-w-md">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h2 id="customSongTitle" class="font-display text-lg font-bold text-white">Tune Custom YouTube Video</h2>
+        <button id="closeCustomSongBtn" type="button" class="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 text-zinc-300 flex items-center justify-center transition-colors">&times;</button>
+      </div>
+
+      <form id="customSongForm" class="py-4 space-y-3">
+        <p class="text-xs text-zinc-400">
+          Paste any YouTube video link or 11-character video ID to stream audio directly on this deck:
+        </p>
+        <input id="customSongInput" type="text" required placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/10 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400">
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold text-xs sm:text-sm transition-transform active:scale-98 shadow-md">
+          Tune Track on Deck
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+   * MODAL 4: SOUVENIR TICKET & SALOON RECEIPT
+   * ============================================================ -->
+  <div id="ticketModal" class="drawer-overlay" role="dialog" aria-modal="true" aria-labelledby="ticketModalTitle">
+    <div class="drawer-card max-w-md">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+        <h2 id="ticketModalTitle" class="font-display text-lg font-bold text-white">Souvenir Travel Ticket & Receipt</h2>
+        <button id="closeTicketBtn" type="button" class="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 text-zinc-300 flex items-center justify-center transition-colors">&times;</button>
+      </div>
+
+      <!-- Ticket Paper Content injected by JS -->
+      <div id="ticketContent" class="mb-4"></div>
+
+      <!-- Action Buttons: Download Receipt & Print Ticket -->
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <button id="downloadTicketBtn" type="button" class="tactile-action-btn py-2 px-4 text-xs font-semibold flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-zinc-950 font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span id="downloadTicketBtnLabel">Download Receipt (PNG)</span>
+        </button>
+
+        <button id="printTicketBtn" type="button" class="tactile-action-btn py-2 px-3.5 text-xs font-semibold flex items-center gap-1.5 hover:bg-white/10 text-white">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Print</span>
+        </button>
+      </div>
+
+      <div class="text-center text-[11px] text-zinc-400">
+        Saved as an authentic retro souvenir card with live ticket details.
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Application Scripts -->
+  <script src="js/audioEngine.js"></script>
+  <script src="js/playlistData.js"></script>
+  <script src="js/visuals.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/pressureHorn.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
