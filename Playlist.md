@@ -8148,7 +8148,14 @@ Safar-And-Saloon/
 - Any modern web browser with HTML5 Canvas and Web Audio API support (Chrome, Edge, Firefox, Safari).
 - [Node.js](https://nodejs.org/) (v16 or newer recommended) or any static HTTP server.
 
-### Local Installation & Launch
+### One-Click Launch (Windows)
+Simply double-click:
+- **`run.bat`** or **`START_PROJECT.bat`** inside the project folder
+- Or double-click the **`Safar and Saloon`** desktop shortcut on your Desktop
+
+It will automatically start the web server and open `http://localhost:3000` in your default browser.
+
+### Manual Terminal Launch
 
 1. **Clone the repository:**
    ```bash
