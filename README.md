@@ -119,6 +119,9 @@ Paste any YouTube link, Short, or 11-character video ID into the custom track mo
 
 ```
 Safar-And-Saloon/
+├── START_PROJECT.bat          # One-click Windows project launcher
+├── PUSH_TO_GITHUB.bat         # One-click Git commit & GitHub push sync
+├── UPDATE_GITHUB.bat          # Alias for PUSH_TO_GITHUB.bat
 ├── index.html                 # Main application layout, semantic DOM & modals
 ├── package.json               # Node.js project manifest & start script
 ├── server.js                  # Native zero-dependency static HTTP server
@@ -163,12 +166,9 @@ Safar-And-Saloon/
 - Any modern web browser with HTML5 Canvas and Web Audio API support (Chrome, Edge, Firefox, Safari).
 - [Node.js](https://nodejs.org/) (v16 or newer recommended) or any static HTTP server.
 
-### One-Click Launch (Windows)
-Simply double-click:
-- **`run.bat`** or **`START_PROJECT.bat`** inside the project folder
-- Or double-click the **`Safar and Saloon`** desktop shortcut on your Desktop
-
-It will automatically start the web server and open `http://localhost:3000` in your default browser.
+### One-Click Launch & GitHub Sync (Windows)
+- **Start Project**: Double-click **`START_PROJECT.bat`** (or desktop shortcut **`Safar and Saloon`**) to launch the server and open your browser automatically.
+- **Sync with GitHub**: Double-click **`PUSH_TO_GITHUB.bat`** or **`UPDATE_GITHUB.bat`** (or desktop shortcut **`Sync with GitHub - Safar & Saloon`**) to automatically refresh codebase bundles, formulate a semantic commit message, commit changes, and push directly to GitHub!
 
 ### Manual Terminal Launch
 
