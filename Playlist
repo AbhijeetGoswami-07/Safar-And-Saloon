@@ -145,7 +145,7 @@ server.listen(PORT, '0.0.0.0', () => {
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.5">
+  <link rel="stylesheet" href="css/styles.css?v=2.6">
 </head>
 <body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
 
@@ -751,12 +751,12 @@ server.listen(PORT, '0.0.0.0', () => {
 
 
   <!-- Application Scripts -->
-  <script src="js/audioEngine.js?v=2.5"></script>
-  <script src="js/playlistData.js?v=2.5"></script>
-  <script src="js/visuals.js?v=2.5"></script>
-  <script src="js/player.js?v=2.5"></script>
-  <script src="js/pressureHorn.js?v=2.5"></script>
-  <script src="js/app.js?v=2.5"></script>
+  <script src="js/audioEngine.js?v=2.6"></script>
+  <script src="js/playlistData.js?v=2.6"></script>
+  <script src="js/visuals.js?v=2.6"></script>
+  <script src="js/player.js?v=2.6"></script>
+  <script src="js/pressureHorn.js?v=2.6"></script>
+  <script src="js/app.js?v=2.6"></script>
 
 </body>
 </html>
@@ -1218,23 +1218,23 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 0 !important;
   font-family: 'Big Shoulders Display', 'Big Shoulders', 'Big Shoulders Text', 'Impact', sans-serif !important;
   font-weight: 900 !important;
-  font-size: clamp(3.6rem, 8.5vw, 6.8rem) !important;
-  line-height: 0.84 !important;
-  letter-spacing: 0.04em !important;
+  font-size: clamp(5.2rem, 13.5vw, 11.2rem) !important;
+  line-height: 0.80 !important;
+  letter-spacing: 0.045em !important;
   text-transform: uppercase !important;
   color: #ffffff !important;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.95), 0 8px 32px rgba(0, 0, 0, 0.9), 0 0 35px rgba(245, 158, 11, 0.35) !important;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.98), 0 12px 48px rgba(0, 0, 0, 0.95), 0 0 50px rgba(245, 158, 11, 0.45) !important;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  transition: color 0.3s ease, text-shadow 0.3s ease, font-size 0.25s ease;
 }
 
 body.theme-saloon .hero-title-headline {
-  font-size: clamp(3.4rem, 8vw, 6.4rem) !important;
+  font-size: clamp(4.6rem, 11.8vw, 9.8rem) !important;
   letter-spacing: 0.05em !important;
   color: #fef3c7 !important;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.98), 0 8px 36px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.4), 0 0 10px rgba(20, 184, 166, 0.3) !important;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.98), 0 12px 48px rgba(0, 0, 0, 0.95), 0 0 50px rgba(245, 158, 11, 0.45), 0 0 20px rgba(20, 184, 166, 0.35) !important;
 }
 
 /* ============================================================
