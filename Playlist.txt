@@ -88,7 +88,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': contentType,
       'Access-Control-Allow-Origin': '*',
-      'Cache-Control': 'no-cache'
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
     });
 
     const stream = fs.createReadStream(filePath);
@@ -143,7 +145,7 @@ server.listen(PORT, '0.0.0.0', () => {
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=2.5">
 </head>
 <body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
 
@@ -334,7 +336,7 @@ server.listen(PORT, '0.0.0.0', () => {
     </div>
 
         <!-- STATIONS DOCK (Sleek Station Selector with Full Name Visibility & Smooth Scrolling) -->
-    <div class="stations-dock-wrapper w-full">
+    <div class="stations-dock-wrapper">
       <div id="stationsNav" class="stations-dock-scroll no-scrollbar">
         <!-- Dynamically filled with station pills -->
       </div>
@@ -749,12 +751,12 @@ server.listen(PORT, '0.0.0.0', () => {
 
 
   <!-- Application Scripts -->
-  <script src="js/audioEngine.js"></script>
-  <script src="js/playlistData.js"></script>
-  <script src="js/visuals.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/pressureHorn.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/audioEngine.js?v=2.5"></script>
+  <script src="js/playlistData.js?v=2.5"></script>
+  <script src="js/visuals.js?v=2.5"></script>
+  <script src="js/player.js?v=2.5"></script>
+  <script src="js/pressureHorn.js?v=2.5"></script>
+  <script src="js/app.js?v=2.5"></script>
 
 </body>
 </html>
@@ -1245,65 +1247,35 @@ body.theme-saloon .hero-title-headline {
 
 .stations-dock-wrapper {
   position: relative;
-  width: 100%;
-  border-radius: 18px;
-  background: rgba(8, 12, 22, 0.88);
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 9999px;
+  background: rgba(8, 12, 22, 0.90);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
   overflow: hidden;
 }
 
 body.theme-saloon .stations-dock-wrapper {
-  background: rgba(18, 12, 8, 0.90);
-  border-color: rgba(245, 158, 11, 0.22);
+  background: rgba(18, 12, 8, 0.92);
+  border-color: rgba(245, 158, 11, 0.28);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
-}
-
-/* Subtle Edge Fades for Overflow Continuity */
-.stations-dock-wrapper::before,
-.stations-dock-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 20px;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.stations-dock-wrapper::before {
-  left: 0;
-  background: linear-gradient(90deg, rgba(8, 12, 22, 0.9), rgba(8, 12, 22, 0));
-}
-
-.stations-dock-wrapper::after {
-  right: 0;
-  background: linear-gradient(270deg, rgba(8, 12, 22, 0.9), rgba(8, 12, 22, 0));
-}
-
-body.theme-saloon .stations-dock-wrapper::before {
-  background: linear-gradient(90deg, rgba(18, 12, 8, 0.9), rgba(18, 12, 8, 0));
-}
-
-body.theme-saloon .stations-dock-wrapper::after {
-  background: linear-gradient(270deg, rgba(18, 12, 8, 0.9), rgba(18, 12, 8, 0));
 }
 
 .stations-dock-scroll {
   display: flex;
   align-items: center;
+  justify-content: flex-start !important;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 20px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Safe centering: centered on wide displays, start-aligned without clipping when overflowing */
-  justify-content: flex-start;
-  justify-content: safe center;
 }
 
 .stations-dock-scroll::-webkit-scrollbar {
@@ -1315,13 +1287,13 @@ body.theme-saloon .stations-dock-wrapper::after {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 14px;
+  padding: 7px 15px;
   border-radius: 9999px;
   background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 12.5px;
   font-weight: 600;
   color: #f8fafc;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
@@ -6668,7 +6640,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stations = window.playlistData[currentMode].stations;
     const activeStation = window.musicPlayer.getActiveStation();
 
-        stations.forEach(station => {
+    stations.forEach((station, index) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = `station-pill ${station.id === activeStation.id ? 'active' : ''}`;
@@ -6683,18 +6655,27 @@ document.addEventListener('DOMContentLoaded', () => {
         window.musicPlayer.setStation(station.id);
         renderStations();
         renderPlaylistDrawer();
-        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        if (index === 0) {
+          stationsNav.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       });
       stationsNav.appendChild(btn);
     });
 
-    // Auto-scroll active pill into view so it is never cut off
-    setTimeout(() => {
-      const activeBtn = stationsNav.querySelector('.station-pill.active');
-      if (activeBtn) {
-        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
-    }, 60);
+    // Ensure first station is always scrolled completely to 0 on initial render or mode switch
+    const activeIndex = stations.findIndex(s => s.id === activeStation.id);
+    if (activeIndex === 0) {
+      stationsNav.scrollLeft = 0;
+    } else {
+      setTimeout(() => {
+        const activeBtn = stationsNav.querySelector('.station-pill.active');
+        if (activeBtn) {
+          activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }, 50);
+    }
   }
 
   /* ============================================================
