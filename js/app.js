@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stations = window.playlistData[currentMode].stations;
     const activeStation = window.musicPlayer.getActiveStation();
 
-    stations.forEach(station => {
+        stations.forEach(station => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = `station-pill ${station.id === activeStation.id ? 'active' : ''}`;
@@ -190,9 +190,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.musicPlayer.setStation(station.id);
         renderStations();
         renderPlaylistDrawer();
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       });
       stationsNav.appendChild(btn);
     });
+
+    // Auto-scroll active pill into view so it is never cut off
+    setTimeout(() => {
+      const activeBtn = stationsNav.querySelector('.station-pill.active');
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }, 60);
   }
 
   /* ============================================================
