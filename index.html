@@ -33,7 +33,7 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.9">
+  <link rel="stylesheet" href="css/styles.css?v=3.0">
 </head>
 <body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
 
@@ -170,47 +170,16 @@
         <span>Rain & Wipers</span>
         <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
       </button>
-
-      <!-- Engine Rumble -->
-      <button id="engineHumToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Heavy Diesel Engine Rumble">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 14 14"></polyline>
-        </svg>
-        <span>Engine Rumble</span>
-        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
-      </button>
     </div>
 
     <!-- 2. SALOON MAN ACTIONS CONTAINER (Initially Hidden) -->
     <div id="saloonActions" class="w-full flex flex-wrap items-center justify-center gap-2 pointer-events-auto hidden">
-      <!-- Scissors Snip -->
-      <button id="scissorSnipBtn" type="button" class="tactile-action-btn text-xs py-2 px-4 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-400/40 text-white shadow-lg" title="Snip Hair Cutting Scissors (Press 'H')">
+      <!-- Spray Bottle Mist (Primary Action) -->
+      <button id="sprayMistBtn" type="button" class="tactile-action-btn text-xs py-2 px-4 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-400/40 text-white shadow-lg" title="Spritz Barber Water Mist (Press 'H')">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="6" cy="6" r="3"></circle>
-          <circle cx="6" cy="18" r="3"></circle>
-          <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
-          <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
-          <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
-        </svg>
-        <span class="font-semibold">Scissors (H)</span>
-      </button>
-
-      <!-- Spray Bottle Mist -->
-      <button id="sprayMistBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Spritz Water Bottle Mist">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>
-        <span>Water Mist</span>
-      </button>
-
-      <!-- Champi Vibrator -->
-      <button id="champiVibratorBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Head Massage Machine Vibrator">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-        <span>Head Massage</span>
-        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+        <span class="font-semibold">Water Mist (H)</span>
       </button>
 
       <!-- Ceiling Fan -->
@@ -512,7 +481,7 @@
 
           <!-- SFX Volume -->
           <div class="flex items-center justify-between gap-4">
-            <span class="text-xs text-zinc-300">Air Horn & Scissors (SFX)</span>
+            <span class="text-xs text-zinc-300">Highway Air Horn (SFX)</span>
             <input id="sfxVolSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-36">
           </div>
 
@@ -520,12 +489,6 @@
           <div class="flex items-center justify-between gap-4">
             <span class="text-xs text-zinc-300">Windshield Rain & Mist</span>
             <input id="rainVolSlider" type="range" min="0" max="1" step="0.05" value="0.35" class="w-36">
-          </div>
-
-          <!-- Engine Rumble -->
-          <div class="flex items-center justify-between gap-4">
-            <span class="text-xs text-zinc-300">Heavy Diesel Engine Rumble</span>
-            <input id="engineVolSlider" type="range" min="0" max="1" step="0.05" value="0.25" class="w-36">
           </div>
 
           <!-- Fan Drone -->
@@ -569,7 +532,7 @@
               </div>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
-              <span class="text-zinc-400">Air Horn / Scissors</span>
+              <span class="text-zinc-400">Air Horn (Driver) / Water Mist (Saloon)</span>
               <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">H</kbd>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
@@ -651,12 +614,12 @@
 
 
   <!-- Application Scripts -->
-  <script src="js/audioEngine.js?v=2.9"></script>
-  <script src="js/playlistData.js?v=2.9"></script>
-  <script src="js/visuals.js?v=2.9"></script>
-  <script src="js/player.js?v=2.9"></script>
-  <script src="js/pressureHorn.js?v=2.9"></script>
-  <script src="js/app.js?v=2.9"></script>
+  <script src="js/audioEngine.js?v=3.0"></script>
+  <script src="js/playlistData.js?v=3.0"></script>
+  <script src="js/visuals.js?v=3.0"></script>
+  <script src="js/player.js?v=3.0"></script>
+  <script src="js/pressureHorn.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
 
 </body>
 </html>

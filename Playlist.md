@@ -145,7 +145,7 @@ server.listen(PORT, '0.0.0.0', () => {
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.9">
+  <link rel="stylesheet" href="css/styles.css?v=3.0">
 </head>
 <body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
 
@@ -282,47 +282,16 @@ server.listen(PORT, '0.0.0.0', () => {
         <span>Rain & Wipers</span>
         <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
       </button>
-
-      <!-- Engine Rumble -->
-      <button id="engineHumToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Heavy Diesel Engine Rumble">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 14 14"></polyline>
-        </svg>
-        <span>Engine Rumble</span>
-        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
-      </button>
     </div>
 
     <!-- 2. SALOON MAN ACTIONS CONTAINER (Initially Hidden) -->
     <div id="saloonActions" class="w-full flex flex-wrap items-center justify-center gap-2 pointer-events-auto hidden">
-      <!-- Scissors Snip -->
-      <button id="scissorSnipBtn" type="button" class="tactile-action-btn text-xs py-2 px-4 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-400/40 text-white shadow-lg" title="Snip Hair Cutting Scissors (Press 'H')">
+      <!-- Spray Bottle Mist (Primary Action) -->
+      <button id="sprayMistBtn" type="button" class="tactile-action-btn text-xs py-2 px-4 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-400/40 text-white shadow-lg" title="Spritz Barber Water Mist (Press 'H')">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="6" cy="6" r="3"></circle>
-          <circle cx="6" cy="18" r="3"></circle>
-          <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
-          <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
-          <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
-        </svg>
-        <span class="font-semibold">Scissors (H)</span>
-      </button>
-
-      <!-- Spray Bottle Mist -->
-      <button id="sprayMistBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Spritz Water Bottle Mist">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>
-        <span>Water Mist</span>
-      </button>
-
-      <!-- Champi Vibrator -->
-      <button id="champiVibratorBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Toggle Head Massage Machine Vibrator">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-        <span>Head Massage</span>
-        <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
+        <span class="font-semibold">Water Mist (H)</span>
       </button>
 
       <!-- Ceiling Fan -->
@@ -624,7 +593,7 @@ server.listen(PORT, '0.0.0.0', () => {
 
           <!-- SFX Volume -->
           <div class="flex items-center justify-between gap-4">
-            <span class="text-xs text-zinc-300">Air Horn & Scissors (SFX)</span>
+            <span class="text-xs text-zinc-300">Highway Air Horn (SFX)</span>
             <input id="sfxVolSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-36">
           </div>
 
@@ -632,12 +601,6 @@ server.listen(PORT, '0.0.0.0', () => {
           <div class="flex items-center justify-between gap-4">
             <span class="text-xs text-zinc-300">Windshield Rain & Mist</span>
             <input id="rainVolSlider" type="range" min="0" max="1" step="0.05" value="0.35" class="w-36">
-          </div>
-
-          <!-- Engine Rumble -->
-          <div class="flex items-center justify-between gap-4">
-            <span class="text-xs text-zinc-300">Heavy Diesel Engine Rumble</span>
-            <input id="engineVolSlider" type="range" min="0" max="1" step="0.05" value="0.25" class="w-36">
           </div>
 
           <!-- Fan Drone -->
@@ -681,7 +644,7 @@ server.listen(PORT, '0.0.0.0', () => {
               </div>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
-              <span class="text-zinc-400">Air Horn / Scissors</span>
+              <span class="text-zinc-400">Air Horn (Driver) / Water Mist (Saloon)</span>
               <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">H</kbd>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
@@ -763,12 +726,12 @@ server.listen(PORT, '0.0.0.0', () => {
 
 
   <!-- Application Scripts -->
-  <script src="js/audioEngine.js?v=2.9"></script>
-  <script src="js/playlistData.js?v=2.9"></script>
-  <script src="js/visuals.js?v=2.9"></script>
-  <script src="js/player.js?v=2.9"></script>
-  <script src="js/pressureHorn.js?v=2.9"></script>
-  <script src="js/app.js?v=2.9"></script>
+  <script src="js/audioEngine.js?v=3.0"></script>
+  <script src="js/playlistData.js?v=3.0"></script>
+  <script src="js/visuals.js?v=3.0"></script>
+  <script src="js/player.js?v=3.0"></script>
+  <script src="js/pressureHorn.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
 
 </body>
 </html>
@@ -3966,7 +3929,7 @@ class AudioEngine {
       setTimeout(() => this.playSingleHorn(), 150);
     } else {
       // Scissors snip + barber chair hydraulic pump
-      this.playScissorSnip();
+      this.playSprayBottle();
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
@@ -6860,7 +6823,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroTitle) heroTitle.textContent = 'DELUXE SALOON';
       updateHeroBadge('saloon');
       const shortcutHorn = document.getElementById('shortcutHornLabel');
-      if (shortcutHorn) shortcutHorn.textContent = 'Scissors';
+      if (shortcutHorn) shortcutHorn.textContent = 'WATER MIST';
     } else {
       document.body.classList.remove('theme-saloon');
       if (modeSwitchDriver) modeSwitchDriver.classList.add('driver-active');
@@ -7074,12 +7037,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const bigHornBtn = document.getElementById('bigHornBtn');
   const autoHornToggleBtn = document.getElementById('autoHornToggleBtn');
   const rainWiperToggleBtn = document.getElementById('rainWiperToggleBtn');
-  const engineHumToggleBtn = document.getElementById('engineHumToggleBtn');
 
   let isAutoHornActive = false;
   let autoHornInterval = null;
 
-    function triggerAirHornBlast() {
+  function triggerAirHornBlast() {
     if (window.pressureHornSystem) {
       window.pressureHornSystem.blowHorn();
       showToast('HIGHWAY AIR HORN (Horn OK Please)');
@@ -7128,51 +7090,25 @@ document.addEventListener('DOMContentLoaded', () => {
       rainWiperToggleBtn.classList.toggle('active', isRainActive);
       const stateBadge = rainWiperToggleBtn.querySelector('.toggle-badge');
       if (stateBadge) stateBadge.textContent = isRainActive ? 'ON' : 'OFF';
+      showToast(isRainActive ? 'Highway Rain & Dual Wipers Active' : 'Rain Stopped');
     });
   }
 
-  let isEngineActive = false;
-  if (engineHumToggleBtn) {
-    engineHumToggleBtn.addEventListener('click', () => {
-      isEngineActive = !isEngineActive;
-      if (window.audioEngine) window.audioEngine.toggleEngineAmbient(isEngineActive);
-      engineHumToggleBtn.classList.toggle('active', isEngineActive);
-      const stateBadge = engineHumToggleBtn.querySelector('.toggle-badge');
-      if (stateBadge) stateBadge.textContent = isEngineActive ? 'ON' : 'OFF';
-    });
-  }
-
-  // 2. Saloon Mode Buttons
-  const scissorSnipBtn = document.getElementById('scissorSnipBtn');
+  // 2. Saloon Mode Buttons (Water Mist & Ceiling Fan)
   const sprayMistBtn = document.getElementById('sprayMistBtn');
-  const champiVibratorBtn = document.getElementById('champiVibratorBtn');
   const ceilingFanBtn = document.getElementById('ceilingFanBtn');
 
-  if (scissorSnipBtn) {
-    scissorSnipBtn.addEventListener('click', () => {
-      if (window.audioEngine) window.audioEngine.playScissorSnip();
-      scissorSnipBtn.classList.add('scale-95');
-      setTimeout(() => scissorSnipBtn.classList.remove('scale-95'), 150);
-    });
+  function triggerWaterMist() {
+    if (window.audioEngine) window.audioEngine.playSprayBottle();
+    if (window.visualsEngine) window.visualsEngine.triggerMist();
+    showToast('Barber Water Mist Spritzer');
   }
 
   if (sprayMistBtn) {
     sprayMistBtn.addEventListener('click', () => {
-      if (window.audioEngine) window.audioEngine.playSprayBottle();
-      if (window.visualsEngine) window.visualsEngine.triggerMist();
+      triggerWaterMist();
       sprayMistBtn.classList.add('scale-95');
       setTimeout(() => sprayMistBtn.classList.remove('scale-95'), 150);
-    });
-  }
-
-  let isChampiActive = false;
-  if (champiVibratorBtn) {
-    champiVibratorBtn.addEventListener('click', () => {
-      isChampiActive = !isChampiActive;
-      if (window.audioEngine) window.audioEngine.toggleChampiVibrator(isChampiActive);
-      champiVibratorBtn.classList.toggle('active', isChampiActive);
-      const stateBadge = champiVibratorBtn.querySelector('.toggle-badge');
-      if (stateBadge) stateBadge.textContent = isChampiActive ? 'ON' : 'OFF';
     });
   }
 
@@ -7281,7 +7217,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sfxVolSlider = document.getElementById('sfxVolSlider');
   const rainVolSlider = document.getElementById('rainVolSlider');
-  const engineVolSlider = document.getElementById('engineVolSlider');
   const fanVolSlider = document.getElementById('fanVolSlider');
 
   if (sfxVolSlider) {
@@ -7295,16 +7230,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.audioEngine.volumes.rain = parseFloat(e.target.value);
         if (window.audioEngine.ambients.rain && window.audioEngine.ambients.rain.gainNode) {
           window.audioEngine.ambients.rain.gainNode.gain.setValueAtTime(parseFloat(e.target.value), window.audioEngine.ctx.currentTime);
-        }
-      }
-    });
-  }
-  if (engineVolSlider) {
-    engineVolSlider.addEventListener('input', (e) => {
-      if (window.audioEngine) {
-        window.audioEngine.volumes.engine = parseFloat(e.target.value);
-        if (window.audioEngine.ambients.engine && window.audioEngine.ambients.engine.gainNode) {
-          window.audioEngine.ambients.engine.gainNode.gain.setValueAtTime(parseFloat(e.target.value), window.audioEngine.ctx.currentTime);
         }
       }
     });
@@ -7765,11 +7690,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.musicPlayer.prevTrack();
     } else if (e.key === 'd' || e.key === 'D' || e.code === 'ArrowRight') {
       window.musicPlayer.nextTrack();
-    } else if (e.key === 'h' || e.key === 'H') {
-      if (window.musicPlayer.currentMode === 'driver') {
+        } else if (e.key === 'h' || e.key === 'H') {
+      if (window.musicPlayer && window.musicPlayer.currentMode === 'driver') {
         triggerAirHornBlast();
       } else {
-        if (window.audioEngine) window.audioEngine.playScissorSnip();
+        triggerWaterMist();
       }
     } else if (e.key === 'm' || e.key === 'M') {
       window.musicPlayer.toggleMute();
@@ -7916,7 +7841,7 @@ document.addEventListener('DOMContentLoaded', () => {
 **Safar & Saloon** is an interactive, browser-native audio-visual web application that revives two quintessential Indian cultural travel and leisure archetypes:
 
 1. 🚌 **Bus Driver (Highway Cabin / Safar)**: Midnight interstate cruising along the **NH-48 corridor**, soulful 90s Bollywood cassette tape classics, a 3D perspective infinite asphalt highway, dynamic day/night/sunset/rain weather cycles, roadside kilometer milestone markers, oncoming vehicle headlight glows, and procedural multi-tone pressure air horns.
-2. 💈 **Deluxe Saloon (Barbershop Lounge)**: Sunday morning haircut sessions, warm teak wood dado wainscoting, vintage gamthi striped wallpaper, an ornate gilded mirror, a rotating tricolor barber pole, a slow 3-blade ceiling fan casting sweeping shadows, and procedural soundboards for dual-blade scissors snips, spritzer water mist, and head massage machines.
+2. 💈 **Deluxe Saloon (Barbershop Lounge)**: Sunday morning haircut sessions, warm teak wood dado wainscoting, vintage gamthi striped wallpaper, an ornate gilded mirror, a rotating tricolor barber pole, a slow 3-blade ceiling fan casting sweeping shadows, and procedural soundboards for spritzer water mist and vintage ceiling fan drone.
 
 Everything runs entirely in client-side vanilla JavaScript, modern CSS3, and HTML5 Canvas with **zero heavy frontend frameworks or build steps required**.
 
@@ -7930,7 +7855,7 @@ Everything runs entirely in client-side vanilla JavaScript, modern CSS3, and HTM
 | **Visual Atmosphere** | 3D perspective highway, distant mountains, streetlights, poles, trees | Full-width saloon room, gamthi wallpaper, teak wood dado, mirror, barber pole |
 | **Motion Physics** | Sub-pixel perspective asphalt glide, roadside entity scaling, cabin heave | 3-blade rotating ceiling fan with dynamic wall shadows, barber pole helix |
 | **Weather / Sky** | Real-time Sunset, Night Halogen Beams, Dark Storm Rain with dual wipers | Warm indoor saloon ambient lighting and fluorescent tube glints |
-| **Procedural Soundboard** | Melodic Song Hook Horn, Classic Dipper Horn, City Clipper, Diesel Rumble | Dual-blade scissor snips, pressurized water mist spritzer, head vibrator, fan hum |
+| **Procedural Soundboard** | Authentic Highway Pressure Air Horn, Rain & Wipers | Pressurized Barber Water Mist, Vintage Ceiling Fan |
 | **Curated Radio Frequencies** | NH-48 Sleeper, Gulzar Ghazals, Manache Ghaav, Dhaba Beats, Monsoon Rain | Deluxe 90s Romance, Gulzar Ghazals, Manache Ghaav, Sunday Morning, Transistor 70s |
 | **Souvenir Generator** | Interstate Highway Passenger Ticket (PNR, Seat, Route) | Deluxe Gentlemen's Hair Salon Appointment Receipt & Bill |
 
@@ -8008,7 +7933,7 @@ Paste any YouTube link, Short, or 11-character video ID into the custom track mo
 | <kbd>D</kbd> or <kbd>→</kbd> | Next Track |
 | <kbd>A</kbd> or <kbd>←</kbd> | Previous Track |
 | <kbd>S</kbd> | Switch Mode (**Bus Driver** ⇄ **Deluxe Saloon**) |
-| <kbd>H</kbd> | Trigger Pressure Air Horn (Driver) / Scissor Snip (Saloon) |
+| <kbd>H</kbd> | Trigger Pressure Air Horn (Driver) / Water Mist (Saloon) |
 | <kbd>M</kbd> | Toggle Mute / Unmute |
 | <kbd>?</kbd> | Open Settings & Audio Ducking Preferences |
 | <kbd>Esc</kbd> | Close Active Modal / Drawer |

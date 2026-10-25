@@ -16,7 +16,7 @@
 **Safar & Saloon** is an interactive, browser-native audio-visual web application that revives two quintessential Indian cultural travel and leisure archetypes:
 
 1. 🚌 **Bus Driver (Highway Cabin / Safar)**: Midnight interstate cruising along the **NH-48 corridor**, soulful 90s Bollywood cassette tape classics, a 3D perspective infinite asphalt highway, dynamic day/night/sunset/rain weather cycles, roadside kilometer milestone markers, oncoming vehicle headlight glows, and procedural multi-tone pressure air horns.
-2. 💈 **Deluxe Saloon (Barbershop Lounge)**: Sunday morning haircut sessions, warm teak wood dado wainscoting, vintage gamthi striped wallpaper, an ornate gilded mirror, a rotating tricolor barber pole, a slow 3-blade ceiling fan casting sweeping shadows, and procedural soundboards for dual-blade scissors snips, spritzer water mist, and head massage machines.
+2. 💈 **Deluxe Saloon (Barbershop Lounge)**: Sunday morning haircut sessions, warm teak wood dado wainscoting, vintage gamthi striped wallpaper, an ornate gilded mirror, a rotating tricolor barber pole, a slow 3-blade ceiling fan casting sweeping shadows, and procedural soundboards for spritzer water mist and vintage ceiling fan drone.
 
 Everything runs entirely in client-side vanilla JavaScript, modern CSS3, and HTML5 Canvas with **zero heavy frontend frameworks or build steps required**.
 
@@ -30,7 +30,7 @@ Everything runs entirely in client-side vanilla JavaScript, modern CSS3, and HTM
 | **Visual Atmosphere** | 3D perspective highway, distant mountains, streetlights, poles, trees | Full-width saloon room, gamthi wallpaper, teak wood dado, mirror, barber pole |
 | **Motion Physics** | Sub-pixel perspective asphalt glide, roadside entity scaling, cabin heave | 3-blade rotating ceiling fan with dynamic wall shadows, barber pole helix |
 | **Weather / Sky** | Real-time Sunset, Night Halogen Beams, Dark Storm Rain with dual wipers | Warm indoor saloon ambient lighting and fluorescent tube glints |
-| **Procedural Soundboard** | Melodic Song Hook Horn, Classic Dipper Horn, City Clipper, Diesel Rumble | Dual-blade scissor snips, pressurized water mist spritzer, head vibrator, fan hum |
+| **Procedural Soundboard** | Authentic Highway Pressure Air Horn, Rain & Wipers | Pressurized Barber Water Mist, Vintage Ceiling Fan |
 | **Curated Radio Frequencies** | NH-48 Sleeper, Gulzar Ghazals, Manache Ghaav, Dhaba Beats, Monsoon Rain | Deluxe 90s Romance, Gulzar Ghazals, Manache Ghaav, Sunday Morning, Transistor 70s |
 | **Souvenir Generator** | Interstate Highway Passenger Ticket (PNR, Seat, Route) | Deluxe Gentlemen's Hair Salon Appointment Receipt & Bill |
 
@@ -108,7 +108,7 @@ Paste any YouTube link, Short, or 11-character video ID into the custom track mo
 | <kbd>D</kbd> or <kbd>→</kbd> | Next Track |
 | <kbd>A</kbd> or <kbd>←</kbd> | Previous Track |
 | <kbd>S</kbd> | Switch Mode (**Bus Driver** ⇄ **Deluxe Saloon**) |
-| <kbd>H</kbd> | Trigger Pressure Air Horn (Driver) / Scissor Snip (Saloon) |
+| <kbd>H</kbd> | Trigger Pressure Air Horn (Driver) / Water Mist (Saloon) |
 | <kbd>M</kbd> | Toggle Mute / Unmute |
 | <kbd>?</kbd> | Open Settings & Audio Ducking Preferences |
 | <kbd>Esc</kbd> | Close Active Modal / Drawer |

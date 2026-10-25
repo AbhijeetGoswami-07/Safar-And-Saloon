@@ -821,7 +821,7 @@ class AudioEngine {
       setTimeout(() => this.playSingleHorn(), 150);
     } else {
       // Scissors snip + barber chair hydraulic pump
-      this.playScissorSnip();
+      this.playSprayBottle();
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';

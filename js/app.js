@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroTitle) heroTitle.textContent = 'DELUXE SALOON';
       updateHeroBadge('saloon');
       const shortcutHorn = document.getElementById('shortcutHornLabel');
-      if (shortcutHorn) shortcutHorn.textContent = 'Scissors';
+      if (shortcutHorn) shortcutHorn.textContent = 'WATER MIST';
     } else {
       document.body.classList.remove('theme-saloon');
       if (modeSwitchDriver) modeSwitchDriver.classList.add('driver-active');
@@ -352,12 +352,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const bigHornBtn = document.getElementById('bigHornBtn');
   const autoHornToggleBtn = document.getElementById('autoHornToggleBtn');
   const rainWiperToggleBtn = document.getElementById('rainWiperToggleBtn');
-  const engineHumToggleBtn = document.getElementById('engineHumToggleBtn');
 
   let isAutoHornActive = false;
   let autoHornInterval = null;
 
-    function triggerAirHornBlast() {
+  function triggerAirHornBlast() {
     if (window.pressureHornSystem) {
       window.pressureHornSystem.blowHorn();
       showToast('HIGHWAY AIR HORN (Horn OK Please)');
@@ -406,51 +405,25 @@ document.addEventListener('DOMContentLoaded', () => {
       rainWiperToggleBtn.classList.toggle('active', isRainActive);
       const stateBadge = rainWiperToggleBtn.querySelector('.toggle-badge');
       if (stateBadge) stateBadge.textContent = isRainActive ? 'ON' : 'OFF';
+      showToast(isRainActive ? 'Highway Rain & Dual Wipers Active' : 'Rain Stopped');
     });
   }
 
-  let isEngineActive = false;
-  if (engineHumToggleBtn) {
-    engineHumToggleBtn.addEventListener('click', () => {
-      isEngineActive = !isEngineActive;
-      if (window.audioEngine) window.audioEngine.toggleEngineAmbient(isEngineActive);
-      engineHumToggleBtn.classList.toggle('active', isEngineActive);
-      const stateBadge = engineHumToggleBtn.querySelector('.toggle-badge');
-      if (stateBadge) stateBadge.textContent = isEngineActive ? 'ON' : 'OFF';
-    });
-  }
-
-  // 2. Saloon Mode Buttons
-  const scissorSnipBtn = document.getElementById('scissorSnipBtn');
+  // 2. Saloon Mode Buttons (Water Mist & Ceiling Fan)
   const sprayMistBtn = document.getElementById('sprayMistBtn');
-  const champiVibratorBtn = document.getElementById('champiVibratorBtn');
   const ceilingFanBtn = document.getElementById('ceilingFanBtn');
 
-  if (scissorSnipBtn) {
-    scissorSnipBtn.addEventListener('click', () => {
-      if (window.audioEngine) window.audioEngine.playScissorSnip();
-      scissorSnipBtn.classList.add('scale-95');
-      setTimeout(() => scissorSnipBtn.classList.remove('scale-95'), 150);
-    });
+  function triggerWaterMist() {
+    if (window.audioEngine) window.audioEngine.playSprayBottle();
+    if (window.visualsEngine) window.visualsEngine.triggerMist();
+    showToast('Barber Water Mist Spritzer');
   }
 
   if (sprayMistBtn) {
     sprayMistBtn.addEventListener('click', () => {
-      if (window.audioEngine) window.audioEngine.playSprayBottle();
-      if (window.visualsEngine) window.visualsEngine.triggerMist();
+      triggerWaterMist();
       sprayMistBtn.classList.add('scale-95');
       setTimeout(() => sprayMistBtn.classList.remove('scale-95'), 150);
-    });
-  }
-
-  let isChampiActive = false;
-  if (champiVibratorBtn) {
-    champiVibratorBtn.addEventListener('click', () => {
-      isChampiActive = !isChampiActive;
-      if (window.audioEngine) window.audioEngine.toggleChampiVibrator(isChampiActive);
-      champiVibratorBtn.classList.toggle('active', isChampiActive);
-      const stateBadge = champiVibratorBtn.querySelector('.toggle-badge');
-      if (stateBadge) stateBadge.textContent = isChampiActive ? 'ON' : 'OFF';
     });
   }
 
@@ -559,7 +532,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sfxVolSlider = document.getElementById('sfxVolSlider');
   const rainVolSlider = document.getElementById('rainVolSlider');
-  const engineVolSlider = document.getElementById('engineVolSlider');
   const fanVolSlider = document.getElementById('fanVolSlider');
 
   if (sfxVolSlider) {
@@ -573,16 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.audioEngine.volumes.rain = parseFloat(e.target.value);
         if (window.audioEngine.ambients.rain && window.audioEngine.ambients.rain.gainNode) {
           window.audioEngine.ambients.rain.gainNode.gain.setValueAtTime(parseFloat(e.target.value), window.audioEngine.ctx.currentTime);
-        }
-      }
-    });
-  }
-  if (engineVolSlider) {
-    engineVolSlider.addEventListener('input', (e) => {
-      if (window.audioEngine) {
-        window.audioEngine.volumes.engine = parseFloat(e.target.value);
-        if (window.audioEngine.ambients.engine && window.audioEngine.ambients.engine.gainNode) {
-          window.audioEngine.ambients.engine.gainNode.gain.setValueAtTime(parseFloat(e.target.value), window.audioEngine.ctx.currentTime);
         }
       }
     });
@@ -1043,11 +1005,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.musicPlayer.prevTrack();
     } else if (e.key === 'd' || e.key === 'D' || e.code === 'ArrowRight') {
       window.musicPlayer.nextTrack();
-    } else if (e.key === 'h' || e.key === 'H') {
-      if (window.musicPlayer.currentMode === 'driver') {
+        } else if (e.key === 'h' || e.key === 'H') {
+      if (window.musicPlayer && window.musicPlayer.currentMode === 'driver') {
         triggerAirHornBlast();
       } else {
-        if (window.audioEngine) window.audioEngine.playScissorSnip();
+        triggerWaterMist();
       }
     } else if (e.key === 'm' || e.key === 'M') {
       window.musicPlayer.toggleMute();
