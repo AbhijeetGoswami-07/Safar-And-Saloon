@@ -331,20 +331,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let isAutoHornActive = false;
   let autoHornInterval = null;
 
-  function triggerAirHornBlast() {
+    function triggerAirHornBlast() {
     if (window.pressureHornSystem) {
-      const curTrack = window.musicPlayer ? window.musicPlayer.currentTrack : null;
-      const res = window.pressureHornSystem.blowHorn(curTrack);
-      if (res) {
-        if (res.type === 'hook') {
-          showToast(`BLOW HORN: "${res.name}" Musical Hook!`);
-        } else {
-          showToast(`BLOW HORN: ${res.name} (${res.description})`);
-        }
-      }
+      window.pressureHornSystem.blowHorn();
+      showToast('HIGHWAY AIR HORN (Horn OK Please)');
     } else if (window.audioEngine) {
-      const trackTitle = window.audioEngine.playTruckAirHorn();
-      showToast(`BLOW HORN: "${trackTitle}" PA Horn Blast!`);
+      window.audioEngine.playTruckAirHorn();
+      showToast('HIGHWAY AIR HORN (Horn OK Please)');
     }
   }
 
@@ -364,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (badge) badge.textContent = isAutoHornActive ? 'ON' : 'OFF';
 
       if (isAutoHornActive) {
-        showToast('Auto Horn Active: Periodic blasts on highway');
+        showToast('Auto Air Horn: Periodic highway blasts');
         clearInterval(autoHornInterval);
         autoHornInterval = setInterval(() => {
           if (window.musicPlayer && window.musicPlayer.isPlaying && window.musicPlayer.currentMode === 'driver') {
@@ -373,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 35000);
       } else {
         clearInterval(autoHornInterval);
-        showToast('Auto Horn Disabled');
+        showToast('Auto Air Horn Disabled');
       }
     });
   }

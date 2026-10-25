@@ -164,7 +164,7 @@ server.listen(PORT, '0.0.0.0', () => {
       <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
       </svg>
-      <span id="toastText">Playing Song Hook on PA Truck Horn</span>
+      <span id="toastText">Highway Pressure Air Horn (Horn OK Please)</span>
     </div>
   </div>
 
@@ -261,12 +261,12 @@ server.listen(PORT, '0.0.0.0', () => {
       </button>
 
       <!-- Auto Song Hook Horn Toggle -->
-      <button id="autoHornToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Auto-blast the song's melodic hook on PA horn during playback">
+      <button id="autoHornToggleBtn" type="button" class="tactile-action-btn py-1.5 px-3 text-xs" title="Auto-blast the highway pressure air horn periodically during highway cruise">
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 14 14"></polyline>
         </svg>
-        <span>Auto Horn Hook</span>
+        <span>Auto Air Horn</span>
         <span class="toggle-badge text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-mono">OFF</span>
       </button>
 
@@ -610,7 +610,7 @@ server.listen(PORT, '0.0.0.0', () => {
 
           <!-- SFX Volume -->
           <div class="flex items-center justify-between gap-4">
-            <span class="text-xs text-zinc-300">Horn Hook & Scissors (SFX)</span>
+            <span class="text-xs text-zinc-300">Air Horn & Scissors (SFX)</span>
             <input id="sfxVolSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-36">
           </div>
 
@@ -667,7 +667,7 @@ server.listen(PORT, '0.0.0.0', () => {
               </div>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
-              <span class="text-zinc-400">Hook Horn / Scissors</span>
+              <span class="text-zinc-400">Air Horn / Scissors</span>
               <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[10px] text-zinc-200">H</kbd>
             </div>
             <div class="flex items-center justify-between py-1 border-b border-white/5">
@@ -3277,88 +3277,43 @@ class AudioEngine {
     ];
   }
 
-  // Play Song Melodic Hook via Truck Rooftop PA Pressure Horn
-  // Uses WaveShaper distortion (100) + 1200Hz Bandpass filter as in PA Horn Converter
-  playSongHookHorn(track) {
-    this.init();
-    if (this.isMuted) return null;
-
-    const currentTrack = track || (window.musicPlayer ? window.musicPlayer.currentTrack : null);
-    const melody = this.getSongHookMelody(currentTrack);
-    const t = this.ctx.currentTime;
-
-    // 1. Create Distortion (overdriven / blown-out metallic horn speaker rasp)
-    const distortionNode = this.ctx.createWaveShaper();
-    distortionNode.curve = this.makeDistortionCurve(100);
-    distortionNode.oversample = '4x';
-
-    // 2. Create Bandpass Filter (Limits frequency to sounding like an authentic PA horn speaker)
-    const filterNode = this.ctx.createBiquadFilter();
-    filterNode.type = 'bandpass';
-    filterNode.frequency.setValueAtTime(1200, t);
-    filterNode.Q.setValueAtTime(2.5, t);
-
-    // Master horn gain
-    const hornMasterGain = this.ctx.createGain();
-    hornMasterGain.gain.setValueAtTime(0.38 * this.volumes.sfx, t);
-
-    // Chain: Distortion -> Bandpass -> Gain -> Master
-    distortionNode.connect(filterNode);
-    filterNode.connect(hornMasterGain);
-    hornMasterGain.connect(this.masterGain);
-
-    melody.forEach(note => {
-      const startTime = t + note.time;
-      const endTime = startTime + note.dur;
-
-      // Primary horn oscillator
-      const osc1 = this.ctx.createOscillator();
-      osc1.type = 'sawtooth';
-      osc1.frequency.setValueAtTime(note.freq, startTime);
-      osc1.detune.setValueAtTime(-5, startTime);
-
-      // Brass harmonic fifth oscillator (for musical air-horn warmth)
-      const osc2 = this.ctx.createOscillator();
-      osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(note.freq * 1.498, startTime);
-      osc2.detune.setValueAtTime(7, startTime);
-
-      // Sub-harmonic body punch
-      const oscSub = this.ctx.createOscillator();
-      oscSub.type = 'triangle';
-      oscSub.frequency.setValueAtTime(note.freq * 0.5, startTime);
-
-      // Note envelope
-      const noteGain = this.ctx.createGain();
-      noteGain.gain.setValueAtTime(0.001, startTime);
-      noteGain.gain.linearRampToValueAtTime(1.0, startTime + 0.015);
-      noteGain.gain.setValueAtTime(0.95, endTime - 0.03);
-      noteGain.gain.exponentialRampToValueAtTime(0.001, endTime);
-
-      osc1.connect(noteGain);
-      osc2.connect(noteGain);
-      oscSub.connect(noteGain);
-
-      noteGain.connect(distortionNode);
-
-      osc1.start(startTime);
-      osc2.start(startTime);
-      oscSub.start(startTime);
-
-      osc1.stop(endTime);
-      osc2.stop(endTime);
-      oscSub.stop(endTime);
-    });
-
-    return currentTrack ? currentTrack.title : 'Highway Classic';
+  // Play Air Horn (triggers modular PressureHornSystem with single signature trumpet)
+  playTruckAirHorn() {
+    if (window.pressureHornSystem) {
+      return window.pressureHornSystem.blowHorn();
+    }
+    return this.playSingleHighwayHorn();
   }
 
-  // Play Air Horn (triggers modular PressureHornSystem with realism pipeline, fallbacks, and ducking)
-  playTruckAirHorn(track) {
-    if (window.pressureHornSystem) {
-      return window.pressureHornSystem.blowHorn(track);
-    }
-    return this.playSongHookHorn(track);
+  playSingleHighwayHorn() {
+    this.init();
+    if (this.isMuted) return null;
+    const t = this.ctx.currentTime;
+    const dur = 1.55;
+
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const oscSub = this.ctx.createOscillator();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(185, t);
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(233.08, t);
+    oscSub.type = 'triangle';
+    oscSub.frequency.setValueAtTime(92.5, t);
+
+    const g = this.ctx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.linearRampToValueAtTime(0.42 * this.volumes.sfx, t + 0.02);
+    g.gain.setValueAtTime(0.38 * this.volumes.sfx, t + dur - 0.2);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+    osc1.connect(g); osc2.connect(g); oscSub.connect(g);
+    g.connect(this.masterGain);
+
+    osc1.start(t); osc2.start(t); oscSub.start(t);
+    osc1.stop(t + dur); osc2.stop(t + dur); oscSub.stop(t + dur);
+    return 'Highway Air Horn';
   }
 
   // Single Quick "Peep" Horn (Overtaking horn)
@@ -3830,19 +3785,13 @@ window.audioEngine = new AudioEngine();
 
 ```javascript:js/pressureHorn.js
 /**
- * PRESSURE HORN SYSTEM - Modular Web Audio Engine
- * High-Pressure Indian Musical & Truck Air Horn with Realism Processing Pipeline
+ * SAFAR & SALOON: HIGHWAY PRESSURE AIR HORN ENGINE
+ * Single Signature Indian Commercial Truck Pressure Air Horn (Horn OK Please)
  *
- * Architecture:
- * 1. Audio Realism Processing Pipeline:
- *    - BiquadFilterNode (Peaking @ 320Hz, +5.5dB) for heavy metallic body resonance
- *    - WaveShaperNode (Diaphragm saturation curve) for high-pressure distortion
- *    - Spatial Stereo Echo (Dual-tap delay: 65ms left, 120ms right with road damping)
- * 2. Smart Horn Selection Logic:
- *    - Custom-tuned musical horn configuration for signature songs
- *    - Fallback System: Random selection from 4 high-fidelity default pressure horns
- * 3. Audio Ducking Transition:
- *    - Dips main music volume over 0.05s, smoothly ramps back when echo tail ends
+ * Realism Audio Graph Pipeline:
+ * [Input Gain] -> [Body Resonance Filter (340Hz)] -> [WaveShaper Saturation]
+ *       |---> [Spatial Highway Delay (Stereo 68ms / 128ms)] ---> [Feedback]
+ *       |---> [Dry Gain] -----------------------------------------> [Master Gain]
  */
 
 class PressureHornSystem {
@@ -3855,334 +3804,115 @@ class PressureHornSystem {
     this.inputGain = null;
     this.bodyFilter = null;
     this.saturationNode = null;
-    this.spatialEcho = null;
     this.masterGain = null;
 
-    // Audio Buffer Cache for the 4 Default Pressure Horns
-    this.assetBuffers = {};
-    this.isLoadingAssets = false;
+    // Single Signature Audio Buffer Cache
+    this.assetBuffer = null;
+    this.isLoadingAsset = false;
 
-    // 4 High-Fidelity Default Fallback Pressure Horns
-    this.defaultHorns = [
-      {
-        id: 'classic-single-tone',
-        name: 'Classic Single-Tone Air Blast',
-        description: 'Deep, sustained high-pressure truck horn',
-        assetUrl: '/sounds/classic_single_tone.wav',
-        fallbackUrl: 'https://actions.google.com/sounds/v1/transportation/truck_horn.ogg',
-        duration: 1.6
-      },
-      {
-        id: 'triple-tone-alternating',
-        name: 'Triple-Tone Alternating Horn',
-        description: 'Fast, switching musical rhythm',
-        assetUrl: '/sounds/triple_tone_alternating.wav',
-        fallbackUrl: 'https://actions.google.com/sounds/v1/transportation/air_horn.ogg',
-        duration: 1.4
-      },
-      {
-        id: 'reverse-siren',
-        name: 'Reverse Siren Style Horn',
-        description: 'Wailing pressure tone',
-        assetUrl: '/sounds/reverse_siren.wav',
-        fallbackUrl: 'https://actions.google.com/sounds/v1/emergency/siren_short.ogg',
-        duration: 1.8
-      },
-      {
-        id: 'sharp-city-clipper',
-        name: 'Sharp City Bus Clipper',
-        description: 'Short, aggressive double-tap blast',
-        assetUrl: '/sounds/sharp_city_clipper.wav',
-        fallbackUrl: 'https://actions.google.com/sounds/v1/transportation/car_horn.ogg',
-        duration: 0.55
-      }
-    ];
-
-    // Signature Song Hook Melodies Database
-    this.songHookMap = {
-      // 1. Dil Ke Badle Sanam
-      'fvwyPGBOEgY': [
-        { time: 0.0,  dur: 0.18, freq: 392.00 },
-        { time: 0.22, dur: 0.18, freq: 440.00 },
-        { time: 0.44, dur: 0.22, freq: 493.88 },
-        { time: 0.70, dur: 0.22, freq: 440.00 },
-        { time: 0.96, dur: 0.38, freq: 392.00 },
-        { time: 1.38, dur: 0.46, freq: 329.63 }
-      ],
-      // 2. Main Agar Saamne (Raaz flute theme)
-      'B2aHXbnu9dI': [
-        { time: 0.0,  dur: 0.22, freq: 329.63 },
-        { time: 0.26, dur: 0.22, freq: 392.00 },
-        { time: 0.52, dur: 0.36, freq: 440.00 },
-        { time: 0.92, dur: 0.42, freq: 493.88 },
-        { time: 1.38, dur: 0.30, freq: 440.00 },
-        { time: 1.72, dur: 0.55, freq: 392.00 }
-      ],
-      // 3. Har Dil Jo Pyar Karega
-      'V0jFYD0PirU': [
-        { time: 0.0,  dur: 0.18, freq: 293.66 },
-        { time: 0.22, dur: 0.18, freq: 369.99 },
-        { time: 0.44, dur: 0.24, freq: 440.00 },
-        { time: 0.72, dur: 0.22, freq: 587.33 },
-        { time: 0.98, dur: 0.25, freq: 493.88 },
-        { time: 1.28, dur: 0.48, freq: 440.00 }
-      ],
-      // 4. Hamne Tumko Dil Ye De Diya
-      'r4QnmrtiDGI': [
-        { time: 0.0,  dur: 0.20, freq: 440.00 },
-        { time: 0.24, dur: 0.20, freq: 493.88 },
-        { time: 0.48, dur: 0.35, freq: 523.25 },
-        { time: 0.88, dur: 0.32, freq: 493.88 },
-        { time: 1.25, dur: 0.50, freq: 440.00 }
-      ],
-      // 5. Taaron Ka Chamakta
-      'XR7qvTgQ19o': [
-        { time: 0.0,  dur: 0.15, freq: 349.23 },
-        { time: 0.18, dur: 0.15, freq: 349.23 },
-        { time: 0.36, dur: 0.22, freq: 440.00 },
-        { time: 0.62, dur: 0.22, freq: 523.25 },
-        { time: 0.88, dur: 0.45, freq: 440.00 }
-      ],
-      // 6. Oye Raju Pyar Na Kariyo
-      'nNhv8A_rJTg': [
-        { time: 0.0,  dur: 0.16, freq: 293.66 },
-        { time: 0.20, dur: 0.16, freq: 329.63 },
-        { time: 0.40, dur: 0.25, freq: 369.99 },
-        { time: 0.70, dur: 0.20, freq: 369.99 },
-        { time: 0.95, dur: 0.42, freq: 440.00 }
-      ],
-      // 7. Ho Gaya Hai Tujhko
-      'hw_HpTI_Wkw': [
-        { time: 0.0,  dur: 0.20, freq: 392.00 },
-        { time: 0.24, dur: 0.20, freq: 440.00 },
-        { time: 0.48, dur: 0.30, freq: 493.88 },
-        { time: 0.82, dur: 0.25, freq: 440.00 },
-        { time: 1.12, dur: 0.45, freq: 392.00 }
-      ],
-      // 8. Bolo Ta Ra Ra
-      'G_eP3lYg2oU': [
-        { time: 0.0,  dur: 0.14, freq: 293.66 },
-        { time: 0.16, dur: 0.14, freq: 293.66 },
-        { time: 0.34, dur: 0.20, freq: 369.99 },
-        { time: 0.58, dur: 0.20, freq: 440.00 },
-        { time: 0.82, dur: 0.20, freq: 440.00 },
-        { time: 1.06, dur: 0.45, freq: 293.66 }
-      ],
-      // 9. Chhaiyya Chhaiyya
-      'PQmrmVs10X8': [
-        { time: 0.0,  dur: 0.18, freq: 220.00 },
-        { time: 0.22, dur: 0.18, freq: 293.66 },
-        { time: 0.44, dur: 0.20, freq: 293.66 },
-        { time: 0.68, dur: 0.22, freq: 329.63 },
-        { time: 0.94, dur: 0.22, freq: 349.23 },
-        { time: 1.20, dur: 0.45, freq: 293.66 }
-      ],
-      // 10. O O Jaane Jaana
-      'x_elT6zkqN0': [
-        { time: 0.0,  dur: 0.18, freq: 329.63 },
-        { time: 0.22, dur: 0.18, freq: 392.00 },
-        { time: 0.44, dur: 0.22, freq: 440.00 },
-        { time: 0.70, dur: 0.28, freq: 493.88 },
-        { time: 1.02, dur: 0.22, freq: 440.00 },
-        { time: 1.30, dur: 0.45, freq: 392.00 }
-      ],
-      // 11. Tip Tip Barsa Paani
-      'yT_3zO28p_8': [
-        { time: 0.0,  dur: 0.20, freq: 392.00 },
-        { time: 0.24, dur: 0.20, freq: 466.16 },
-        { time: 0.48, dur: 0.25, freq: 523.25 },
-        { time: 0.78, dur: 0.22, freq: 466.16 },
-        { time: 1.04, dur: 0.45, freq: 392.00 }
-      ],
-      // 12. Mera Dil Bhi Kitna Pagal Hai
-      'J2z_a0vLd-U': [
-        { time: 0.0,  dur: 0.20, freq: 293.66 },
-        { time: 0.24, dur: 0.20, freq: 369.99 },
-        { time: 0.48, dur: 0.28, freq: 440.00 },
-        { time: 0.80, dur: 0.22, freq: 493.88 },
-        { time: 1.06, dur: 0.45, freq: 440.00 }
-      ],
-      // 13. Dheere Dheere Se
-      'M3eXbS-B900': [
-        { time: 0.0,  dur: 0.22, freq: 329.63 },
-        { time: 0.26, dur: 0.22, freq: 392.00 },
-        { time: 0.52, dur: 0.28, freq: 440.00 },
-        { time: 0.84, dur: 0.25, freq: 392.00 },
-        { time: 1.14, dur: 0.48, freq: 329.63 }
-      ],
-      // 14. Tujhe Dekha Toh Yeh Jaana Sanam
-      'cNV5hLKh98s': [
-        { time: 0.0,  dur: 0.20, freq: 293.66 },
-        { time: 0.24, dur: 0.20, freq: 329.63 },
-        { time: 0.48, dur: 0.25, freq: 369.99 },
-        { time: 0.78, dur: 0.25, freq: 392.00 },
-        { time: 1.08, dur: 0.22, freq: 369.99 },
-        { time: 1.34, dur: 0.45, freq: 293.66 }
-      ],
-      // 15. Zingaat (Ajay-Atul)
-      '2gcsgfzqN8k': [
-        { time: 0.0,  dur: 0.15, freq: 293.66 },
-        { time: 0.16, dur: 0.15, freq: 329.63 },
-        { time: 0.32, dur: 0.18, freq: 369.99 },
-        { time: 0.52, dur: 0.22, freq: 440.00 },
-        { time: 0.76, dur: 0.20, freq: 587.33 },
-        { time: 0.98, dur: 0.22, freq: 523.25 },
-        { time: 1.22, dur: 0.48, freq: 440.00 }
-      ],
-      'luhVm60Wiro': [
-        { time: 0.0,  dur: 0.15, freq: 293.66 },
-        { time: 0.16, dur: 0.15, freq: 329.63 },
-        { time: 0.32, dur: 0.18, freq: 369.99 },
-        { time: 0.52, dur: 0.22, freq: 440.00 },
-        { time: 0.76, dur: 0.20, freq: 587.33 },
-        { time: 0.98, dur: 0.22, freq: 523.25 },
-        { time: 1.22, dur: 0.48, freq: 440.00 }
-      ],
-      // 16. Apsara Aali (Natarang)
-      'mW67u_hWiSo': [
-        { time: 0.0,  dur: 0.20, freq: 440.00 },
-        { time: 0.24, dur: 0.20, freq: 493.88 },
-        { time: 0.48, dur: 0.25, freq: 523.25 },
-        { time: 0.76, dur: 0.22, freq: 440.00 },
-        { time: 1.00, dur: 0.25, freq: 392.00 },
-        { time: 1.28, dur: 0.50, freq: 440.00 }
-      ],
-      // 17. Kombdi Palali (Jatra)
-      '2KaDL9TSja0': [
-        { time: 0.0,  dur: 0.16, freq: 329.63 },
-        { time: 0.18, dur: 0.16, freq: 329.63 },
-        { time: 0.36, dur: 0.20, freq: 392.00 },
-        { time: 0.58, dur: 0.20, freq: 440.00 },
-        { time: 0.80, dur: 0.25, freq: 392.00 },
-        { time: 1.08, dur: 0.45, freq: 329.63 }
-      ],
-      // 18. Lollypop Lagelu (Pawan Singh)
-      'Gr8G_ldltDE': [
-        { time: 0.0,  dur: 0.18, freq: 392.00 },
-        { time: 0.20, dur: 0.18, freq: 392.00 },
-        { time: 0.40, dur: 0.20, freq: 440.00 },
-        { time: 0.62, dur: 0.25, freq: 493.88 },
-        { time: 0.90, dur: 0.28, freq: 587.33 },
-        { time: 1.20, dur: 0.22, freq: 493.88 },
-        { time: 1.45, dur: 0.48, freq: 392.00 }
-      ],
-      // 19. Rinkiya Ke Papa (Manoj Tiwari)
-      '2Mv8UOiyTq0': [
-        { time: 0.0,  dur: 0.18, freq: 329.63 },
-        { time: 0.22, dur: 0.18, freq: 415.30 },
-        { time: 0.44, dur: 0.22, freq: 493.88 },
-        { time: 0.70, dur: 0.25, freq: 554.37 },
-        { time: 0.98, dur: 0.22, freq: 493.88 },
-        { time: 1.24, dur: 0.46, freq: 415.30 }
-      ],
-      // 20. Raate Diya Butake
-      'N9Ylebtf8YI': [
-        { time: 0.0,  dur: 0.16, freq: 349.23 },
-        { time: 0.20, dur: 0.16, freq: 440.00 },
-        { time: 0.40, dur: 0.22, freq: 523.25 },
-        { time: 0.66, dur: 0.25, freq: 587.33 },
-        { time: 0.94, dur: 0.22, freq: 523.25 },
-        { time: 1.20, dur: 0.45, freq: 440.00 }
-      ]
+    // Single Unified Highway Pressure Horn Definition
+    this.singleHorn = {
+      id: 'classic-single-tone',
+      name: 'Highway Pressure Air Horn',
+      description: 'Single Authentic Indian Interstate Truck Trumpet',
+      assetUrl: 'sounds/classic_single_tone.wav',
+      duration: 1.55
     };
   }
 
-  /* ============================================================
-   * 1. AUDIO REALISM PROCESSING PIPELINE
-   * ============================================================ */
-
+  // Lazy Initialization of AudioContext and Realism Pipeline
   init() {
-    if (!this.ctx) {
-      if (window.audioEngine && window.audioEngine.ctx) {
-        this.ctx = window.audioEngine.ctx;
-      } else {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AudioContext();
+    if (this.ctx && this.ctx.state !== 'closed') {
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
       }
+      return;
     }
 
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      console.warn('Web Audio API is not supported in this browser environment.');
+      return;
     }
 
-    if (!this.inputGain) {
-      this.buildPipeline();
-      this.preloadDefaultAssets();
+    if (window.audioEngine && window.audioEngine.ctx) {
+      this.ctx = window.audioEngine.ctx;
+    } else {
+      this.ctx = new AudioContextClass();
     }
+
+    this.buildRealismPipeline();
+    this.preloadSingleAsset();
   }
 
-  // Generate subtle diaphragm overdrive / saturation curve
-  makeDiaphragmSaturationCurve(amount = 22) {
+  // Make Soft-Clipping Saturation Curve for Diaphragm Air Pressure
+  makeDistortionCurve(amount = 25) {
+    const k = typeof amount === 'number' ? amount : 25;
     const n_samples = 44100;
     const curve = new Float32Array(n_samples);
-    const k = amount;
+    const deg = Math.PI / 180;
     for (let i = 0; i < n_samples; ++i) {
       const x = (i * 2) / n_samples - 1;
-      // Soft saturation mimicking acoustic speaker diaphragm stress under high pressure
-      curve[i] = ((1 + k) * x) / (1 + k * Math.abs(x));
+      curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
     }
     return curve;
   }
 
-  buildPipeline() {
+  // Build the Realism Pipeline
+  buildRealismPipeline() {
     const ctx = this.ctx;
 
-    // A. Input Node (receives all raw horn oscillators and buffer sources)
     this.inputGain = ctx.createGain();
     this.inputGain.gain.setValueAtTime(1.0, ctx.currentTime);
 
-    // B. Low-mid Resonance Filter (Boosts 200Hz - 500Hz for heavy metallic body vibration)
+    // 1. Acoustic Body Resonance Filter (peaking filter at 340Hz, +5.8dB boost)
     this.bodyFilter = ctx.createBiquadFilter();
     this.bodyFilter.type = 'peaking';
-    this.bodyFilter.frequency.setValueAtTime(340, ctx.currentTime); // Mid-low resonance center
-    this.bodyFilter.Q.setValueAtTime(1.3, ctx.currentTime);
-    this.bodyFilter.gain.setValueAtTime(5.8, ctx.currentTime); // +5.8dB metallic body vibration
+    this.bodyFilter.frequency.setValueAtTime(340, ctx.currentTime);
+    this.bodyFilter.Q.setValueAtTime(1.6, ctx.currentTime);
+    this.bodyFilter.gain.setValueAtTime(5.8, ctx.currentTime);
 
-    // C. WaveShaperNode (Diaphragm saturation & intense pressure overdrive)
+    // 2. WaveShaper Saturation Node (Diaphragm saturation)
     this.saturationNode = ctx.createWaveShaper();
-    this.saturationNode.curve = this.makeDiaphragmSaturationCurve(22);
+    this.saturationNode.curve = this.makeDistortionCurve(28);
     this.saturationNode.oversample = '4x';
 
-    // D. Master Horn Output Gain
-    this.masterGain = ctx.createGain();
-    this.masterGain.gain.setValueAtTime(this.volume, ctx.currentTime);
-
-    // E. Spatial Echo Network (Dual-tap stereo delay between 50ms - 150ms)
+    // 3. Spatial Highway Stereo Echo (Dual-tap delay)
     const delayL = ctx.createDelay();
-    delayL.delayTime.setValueAtTime(0.068, ctx.currentTime); // 68ms left reflection
-
     const delayR = ctx.createDelay();
-    delayR.delayTime.setValueAtTime(0.128, ctx.currentTime); // 128ms right reflection
+    delayL.delayTime.setValueAtTime(0.068, ctx.currentTime);
+    delayR.delayTime.setValueAtTime(0.128, ctx.currentTime);
 
     const feedbackL = ctx.createGain();
-    feedbackL.gain.setValueAtTime(0.26, ctx.currentTime); // Decaying highway flutter echo
-
     const feedbackR = ctx.createGain();
-    feedbackR.gain.setValueAtTime(0.26, ctx.currentTime);
+    feedbackL.gain.setValueAtTime(0.24, ctx.currentTime);
+    feedbackR.gain.setValueAtTime(0.20, ctx.currentTime);
 
-    // Damping Filter (Simulates highway asphalt and building acoustic absorption)
     const echoFilter = ctx.createBiquadFilter();
     echoFilter.type = 'lowpass';
-    echoFilter.frequency.setValueAtTime(2600, ctx.currentTime);
+    echoFilter.frequency.setValueAtTime(1400, ctx.currentTime);
+
+    const dryGain = ctx.createGain();
+    dryGain.gain.setValueAtTime(0.82, ctx.currentTime);
+
+    const wetGain = ctx.createGain();
+    wetGain.gain.setValueAtTime(0.32, ctx.currentTime);
 
     const splitter = ctx.createChannelSplitter(2);
     const merger = ctx.createChannelMerger(2);
-    const wetGain = ctx.createGain();
-    wetGain.gain.setValueAtTime(0.42, ctx.currentTime); // Spatial highway reverb mix level
 
-    const dryGain = ctx.createGain();
-    dryGain.gain.setValueAtTime(0.92, ctx.currentTime);
+    this.masterGain = ctx.createGain();
+    this.masterGain.gain.setValueAtTime(this.volume, ctx.currentTime);
 
-    // Connect Primary Processing Chain:
-    // Input -> Body Filter (200-500Hz boost) -> WaveShaper (Diaphragm Saturation)
+    // Wire Up Graph
     this.inputGain.connect(this.bodyFilter);
     this.bodyFilter.connect(this.saturationNode);
 
-    // Dry Path: Saturation -> Dry Gain -> Master
+    // Dry Path
     this.saturationNode.connect(dryGain);
     dryGain.connect(this.masterGain);
 
-    // Spatial Echo Path: Saturation -> Splitter -> Delays -> Feedback -> Merger -> Wet Gain -> Master
+    // Spatial Echo Path
     this.saturationNode.connect(splitter);
     splitter.connect(delayL, 0);
     splitter.connect(delayR, 1);
@@ -4200,7 +3930,7 @@ class PressureHornSystem {
     merger.connect(wetGain);
     wetGain.connect(this.masterGain);
 
-    // Connect to destination (or AudioEngine master bus)
+    // Connect to destination or audioEngine master
     if (window.audioEngine && window.audioEngine.masterGain) {
       this.masterGain.connect(window.audioEngine.masterGain);
     } else {
@@ -4208,153 +3938,82 @@ class PressureHornSystem {
     }
   }
 
-  // Preload and decode the 4 default fallback audio assets
-  async preloadDefaultAssets() {
-    if (this.isLoadingAssets) return;
-    this.isLoadingAssets = true;
+  // Preload the Single Highway Air Horn Sound Asset
+  async preloadSingleAsset() {
+    if (this.isLoadingAsset || this.assetBuffer) return;
+    this.isLoadingAsset = true;
 
-    for (const horn of this.defaultHorns) {
-      try {
-        const url = horn.assetUrl;
-        const resp = await fetch(url);
-        if (resp.ok) {
-          const arrayBuf = await resp.arrayBuffer();
-          const audioBuf = await this.ctx.decodeAudioData(arrayBuf);
-          this.assetBuffers[horn.id] = audioBuf;
-        }
-      } catch (err) {
-        console.warn(`Could not preload ${horn.id} audio asset; procedural synthesizer active:`, err.message);
+    try {
+      const resp = await fetch(this.singleHorn.assetUrl);
+      if (resp.ok) {
+        const arrayBuf = await resp.arrayBuffer();
+        this.assetBuffer = await this.ctx.decodeAudioData(arrayBuf);
       }
+    } catch (err) {
+      console.warn('Procedural synthesizer active for highway air horn:', err.message);
+    } finally {
+      this.isLoadingAsset = false;
     }
+  }
+
+  // Synthesize Single Iconic Indian Highway Pressure Air Horn
+  synthesizeSingleHorn(t) {
+    const ctx = this.ctx;
+    const dur = this.singleHorn.duration;
+
+    // Dual Trumpet Harmonics (F#3 fundamental @ 185Hz, Bb3 minor 3rd @ 233Hz, F#4 @ 370Hz)
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const osc3 = ctx.createOscillator();
+    const oscSub = ctx.createOscillator();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(185, t);
+    osc1.detune.setValueAtTime(-4, t);
+
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(233.08, t);
+    osc2.detune.setValueAtTime(5, t);
+
+    osc3.type = 'sawtooth';
+    osc3.frequency.setValueAtTime(370, t);
+    osc3.detune.setValueAtTime(2, t);
+
+    oscSub.type = 'triangle';
+    oscSub.frequency.setValueAtTime(92.5, t);
+
+    const hornGain = ctx.createGain();
+    hornGain.gain.setValueAtTime(0.001, t);
+    hornGain.gain.linearRampToValueAtTime(0.96, t + 0.018); // Instant pneumatic attack
+    hornGain.gain.setValueAtTime(0.92, t + dur - 0.22);
+    hornGain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+    osc1.connect(hornGain);
+    osc2.connect(hornGain);
+    osc3.connect(hornGain);
+    oscSub.connect(hornGain);
+
+    hornGain.connect(this.inputGain);
+
+    osc1.start(t); osc2.start(t); osc3.start(t); oscSub.start(t);
+    osc1.stop(t + dur); osc2.stop(t + dur); osc3.stop(t + dur); oscSub.stop(t + dur);
   }
 
   /* ============================================================
-   * 2. SMART HORN SELECTION & FALLBACK LOGIC
+   * MASTER SINGLE "BLOW HORN" TRIGGER
    * ============================================================ */
 
-  // Check if a track has a dedicated custom-tuned musical horn
-  hasSongHook(track) {
-    if (!track) return false;
-    const id = track.id || '';
-    const title = (track.title || '').toLowerCase();
+  blowHorn() {
+    this.init();
+    if (this.isMuted) return null;
 
-    if (this.songHookMap[id]) return true;
-
-    // Check title matches
-    const mappedTitles = [
-      'dil ke badle', 'agar saamne', 'har dil jo', 'tumko dil ye', 'taaron ka',
-      'oye raju', 'ho gaya hai', 'bolo ta ra', 'chhaiyya', 'jaane jaana',
-      'tip tip', 'kitna pagal', 'dheere dheere', 'tujhe dekha', 'zingaat',
-      'apsara aali', 'kombdi palali', 'lollypop', 'kamariya kare', 'rinkiya', 'diya butake'
-    ];
-    return mappedTitles.some(sub => title.includes(sub));
-  }
-
-  // Retrieve melody array for a mapped track
-  getSongHookMelody(track) {
-    if (!track) return null;
-    const id = track.id || '';
-    const title = (track.title || '').toLowerCase();
-
-    if (this.songHookMap[id]) return this.songHookMap[id];
-
-    for (const key of Object.keys(this.songHookMap)) {
-      if (id === key) return this.songHookMap[key];
-    }
-
-    // Title fallback matches
-    if (title.includes('dil ke badle')) return this.songHookMap['fvwyPGBOEgY'];
-    if (title.includes('agar saamne')) return this.songHookMap['B2aHXbnu9dI'];
-    if (title.includes('har dil jo')) return this.songHookMap['V0jFYD0PirU'];
-    if (title.includes('tumko dil ye')) return this.songHookMap['r4QnmrtiDGI'];
-    if (title.includes('taaron ka')) return this.songHookMap['XR7qvTgQ19o'];
-    if (title.includes('oye raju')) return this.songHookMap['nNhv8A_rJTg'];
-    if (title.includes('ho gaya hai')) return this.songHookMap['hw_HpTI_Wkw'];
-    if (title.includes('bolo ta ra')) return this.songHookMap['G_eP3lYg2oU'];
-    if (title.includes('chhaiyya')) return this.songHookMap['PQmrmVs10X8'];
-    if (title.includes('jaane jaana')) return this.songHookMap['x_elT6zkqN0'];
-    if (title.includes('tip tip')) return this.songHookMap['yT_3zO28p_8'];
-    if (title.includes('kitna pagal')) return this.songHookMap['J2z_a0vLd-U'];
-    if (title.includes('dheere dheere')) return this.songHookMap['M3eXbS-B900'];
-    if (title.includes('tujhe dekha')) return this.songHookMap['cNV5hLKh98s'];
-    if (title.includes('zingaat')) return this.songHookMap['2gcsgfzqN8k'];
-    if (title.includes('apsara aali')) return this.songHookMap['mW67u_hWiSo'];
-    if (title.includes('kombdi palali')) return this.songHookMap['2KaDL9TSja0'];
-    if (title.includes('lollypop') || title.includes('kamariya kare')) return this.songHookMap['Gr8G_ldltDE'];
-    if (title.includes('rinkiya')) return this.songHookMap['2Mv8UOiyTq0'];
-    if (title.includes('diya butake')) return this.songHookMap['N9Ylebtf8YI'];
-
-    return null;
-  }
-
-  // Synthesize musical hook notes through the realism pipeline
-  playSongHook(melody, trackName = 'Highway Classic') {
     const t = this.ctx.currentTime;
-    let maxEndTime = t;
+    let hornResult = null;
 
-    melody.forEach(note => {
-      const startTime = t + note.time;
-      const endTime = startTime + note.dur;
-      if (endTime > maxEndTime) maxEndTime = endTime;
-
-      // 1. Primary high-pressure brass reed oscillator
-      const osc1 = this.ctx.createOscillator();
-      osc1.type = 'sawtooth';
-      osc1.frequency.setValueAtTime(note.freq, startTime);
-      osc1.detune.setValueAtTime(-6, startTime);
-
-      // 2. Dual trumpet harmonic fifth (musical air-horn thickness)
-      const osc2 = this.ctx.createOscillator();
-      osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(note.freq * 1.498, startTime);
-      osc2.detune.setValueAtTime(8, startTime);
-
-      // 3. Sub-octave pneumatic chest punch
-      const oscSub = this.ctx.createOscillator();
-      oscSub.type = 'triangle';
-      oscSub.frequency.setValueAtTime(note.freq * 0.5, startTime);
-
-      // Note acoustic pressure envelope
-      const noteGain = this.ctx.createGain();
-      noteGain.gain.setValueAtTime(0.001, startTime);
-      noteGain.gain.linearRampToValueAtTime(0.85, startTime + 0.018); // Instant pneumatic burst
-      noteGain.gain.setValueAtTime(0.80, endTime - 0.035);
-      noteGain.gain.exponentialRampToValueAtTime(0.001, endTime);
-
-      osc1.connect(noteGain);
-      osc2.connect(noteGain);
-      oscSub.connect(noteGain);
-
-      // Route through the realism pipeline
-      noteGain.connect(this.inputGain);
-
-      osc1.start(startTime);
-      osc2.start(startTime);
-      oscSub.start(startTime);
-
-      osc1.stop(endTime);
-      osc2.stop(endTime);
-      oscSub.stop(endTime);
-    });
-
-    const totalDuration = maxEndTime - t;
-    return {
-      type: 'hook',
-      name: trackName,
-      description: 'Custom Melodic Song Hook Horn',
-      duration: totalDuration
-    };
-  }
-
-  // Play one of the 4 high-quality default fallback pressure horns
-  playFallbackHorn(chosenHorn = null) {
-    const horn = chosenHorn || this.defaultHorns[Math.floor(Math.random() * this.defaultHorns.length)];
-    const t = this.ctx.currentTime;
-
-    // Check if high-fidelity AudioBuffer is preloaded
-    if (this.assetBuffers[horn.id]) {
+    // 1. Play Preloaded High-Fidelity Audio Buffer if Available
+    if (this.assetBuffer) {
       const source = this.ctx.createBufferSource();
-      source.buffer = this.assetBuffers[horn.id];
+      source.buffer = this.assetBuffer;
 
       const gain = this.ctx.createGain();
       gain.gain.setValueAtTime(0.95, t);
@@ -4363,214 +4022,26 @@ class PressureHornSystem {
       gain.connect(this.inputGain);
       source.start(t);
 
-      return {
-        type: 'fallback',
-        id: horn.id,
-        name: horn.name,
-        description: horn.description,
-        duration: horn.duration
+      hornResult = {
+        type: 'single',
+        name: 'Highway Air Horn',
+        description: 'Classic High-Pressure Indian Interstate Truck Horn',
+        duration: this.singleHorn.duration
       };
-    }
-
-    // Procedural High-Fidelity Synthesizer for Fallbacks
-    this.synthesizeFallback(horn.id, t);
-
-    return {
-      type: 'fallback',
-      id: horn.id,
-      name: horn.name,
-      description: horn.description,
-      duration: horn.duration
-    };
-  }
-
-  // Procedural Synthesis Engine for the 4 Default Pressure Horns
-  synthesizeFallback(hornId, t) {
-    const ctx = this.ctx;
-
-    // 1. Classic Single-Tone Air Blast (Deep, sustained high-pressure truck horn ~1.6s)
-    if (hornId === 'classic-single-tone') {
-      const dur = 1.6;
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const oscSub = ctx.createOscillator();
-
-      osc1.type = 'sawtooth';
-      osc1.frequency.setValueAtTime(185, t); // F#3 heavy truck trumpet
-      osc1.detune.setValueAtTime(-5, t);
-
-      osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(233, t); // Bb3 minor third resonance
-      osc2.detune.setValueAtTime(6, t);
-
-      oscSub.type = 'triangle';
-      oscSub.frequency.setValueAtTime(92.5, t); // Deep chassis vibration
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.001, t);
-      gain.gain.linearRampToValueAtTime(0.95, t + 0.025);
-      gain.gain.setValueAtTime(0.90, t + dur - 0.18);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-
-      osc1.connect(gain);
-      osc2.connect(gain);
-      oscSub.connect(gain);
-      gain.connect(this.inputGain);
-
-      osc1.start(t); osc2.start(t); oscSub.start(t);
-      osc1.stop(t + dur); osc2.stop(t + dur); oscSub.stop(t + dur);
-    }
-    // 2. Triple-Tone Alternating Horn (Fast, switching musical rhythm ~1.4s)
-    else if (hornId === 'triple-tone-alternating') {
-      const notes = [
-        { time: 0.0,  dur: 0.22, freq: 329.63 },
-        { time: 0.22, dur: 0.22, freq: 415.30 },
-        { time: 0.44, dur: 0.22, freq: 493.88 },
-        { time: 0.68, dur: 0.65, freq: [329.63, 415.30, 493.88] } // Full triad chord blast
-      ];
-
-      notes.forEach(n => {
-        const start = t + n.time;
-        const end = start + n.dur;
-
-        if (Array.isArray(n.freq)) {
-          n.freq.forEach(f => {
-            const osc = ctx.createOscillator();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(f, start);
-
-            const g = ctx.createGain();
-            g.gain.setValueAtTime(0.001, start);
-            g.gain.linearRampToValueAtTime(0.40, start + 0.02);
-            g.gain.setValueAtTime(0.36, end - 0.06);
-            g.gain.exponentialRampToValueAtTime(0.001, end);
-
-            osc.connect(g);
-            g.connect(this.inputGain);
-            osc.start(start);
-            osc.stop(end);
-          });
-        } else {
-          const osc1 = ctx.createOscillator();
-          const osc2 = ctx.createOscillator();
-          osc1.type = 'sawtooth';
-          osc1.frequency.setValueAtTime(n.freq, start);
-          osc2.type = 'sawtooth';
-          osc2.frequency.setValueAtTime(n.freq * 1.5, start);
-
-          const g = ctx.createGain();
-          g.gain.setValueAtTime(0.001, start);
-          g.gain.linearRampToValueAtTime(0.85, start + 0.015);
-          g.gain.setValueAtTime(0.80, end - 0.03);
-          g.gain.exponentialRampToValueAtTime(0.001, end);
-
-          osc1.connect(g);
-          osc2.connect(g);
-          g.connect(this.inputGain);
-
-          osc1.start(start); osc2.start(start);
-          osc1.stop(end); osc2.stop(end);
-        }
-      });
-    }
-    // 3. Reverse Siren Style Horn (Wailing pressure tone ~1.8s)
-    else if (hornId === 'reverse-siren') {
-      const dur = 1.8;
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-
-      osc1.type = 'sawtooth';
-      osc2.type = 'sawtooth';
-
-      // Ascending-then-descending pressure wail
-      osc1.frequency.setValueAtTime(330, t);
-      osc1.frequency.exponentialRampToValueAtTime(530, t + 0.7);
-      osc1.frequency.exponentialRampToValueAtTime(390, t + dur);
-
-      osc2.frequency.setValueAtTime(495, t);
-      osc2.frequency.exponentialRampToValueAtTime(795, t + 0.7);
-      osc2.frequency.exponentialRampToValueAtTime(585, t + dur);
-
-      // Tremolo / fluttering air valve modulation
-      const lfo = ctx.createOscillator();
-      const lfoGain = ctx.createGain();
-      lfo.frequency.setValueAtTime(8.5, t); // 8.5Hz pneumatic flutter
-      lfoGain.gain.setValueAtTime(0.14, t);
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.001, t);
-      gain.gain.linearRampToValueAtTime(0.85, t + 0.03);
-      gain.gain.setValueAtTime(0.80, t + dur - 0.18);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-
-      lfo.connect(lfoGain);
-      lfoGain.connect(gain.gain);
-
-      osc1.connect(gain);
-      osc2.connect(gain);
-      gain.connect(this.inputGain);
-
-      lfo.start(t); osc1.start(t); osc2.start(t);
-      lfo.stop(t + dur); osc1.stop(t + dur); osc2.stop(t + dur);
-    }
-    // 4. Sharp City Bus Clipper (Short, aggressive double-tap blast ~0.55s)
-    else {
-      const taps = [
-        { start: 0.00, dur: 0.16 },
-        { start: 0.24, dur: 0.22 }
-      ];
-
-      taps.forEach(tap => {
-        const start = t + tap.start;
-        const end = start + tap.dur;
-
-        const osc1 = ctx.createOscillator();
-        const osc2 = ctx.createOscillator();
-
-        osc1.type = 'sawtooth';
-        osc1.frequency.setValueAtTime(392, start); // G4
-        osc2.type = 'sawtooth';
-        osc2.frequency.setValueAtTime(494, start); // B4
-
-        const g = ctx.createGain();
-        g.gain.setValueAtTime(0.001, start);
-        g.gain.linearRampToValueAtTime(0.92, start + 0.01); // Instant razor-sharp attack
-        g.gain.setValueAtTime(0.88, end - 0.02);
-        g.gain.exponentialRampToValueAtTime(0.001, end);
-
-        osc1.connect(g);
-        osc2.connect(g);
-        g.connect(this.inputGain);
-
-        osc1.start(start); osc2.start(start);
-        osc1.stop(end); osc2.stop(end);
-      });
-    }
-  }
-
-  /* ============================================================
-   * 3. MASTER "BLOW HORN" TRIGGER & AUDIO DUCKING TRANSITION
-   * ============================================================ */
-
-  blowHorn(track = null) {
-    this.init();
-    if (this.isMuted) return null;
-
-    const currentTrack = track || (window.musicPlayer ? window.musicPlayer.currentTrack : null);
-    let hornResult = null;
-
-    // Check if current song has a mapped musical hook
-    const melody = this.getSongHookMelody(currentTrack);
-    if (melody) {
-      hornResult = this.playSongHook(melody, currentTrack ? currentTrack.title : 'Song Hook');
     } else {
-      // Smart Fallback System: Random selection from 4 high-quality default pressure horns
-      hornResult = this.playFallbackHorn();
+      // 2. Procedural Realism Synthesizer Fallback
+      this.synthesizeSingleHorn(t);
+      hornResult = {
+        type: 'single',
+        name: 'Highway Air Horn',
+        description: 'Classic High-Pressure Indian Interstate Truck Horn',
+        duration: this.singleHorn.duration
+      };
     }
 
     // 3. Audio Ducking Transition:
     // Instantly dip main music volume over 0.05s, then smoothly restore once echo tail ends
-    const totalDuckingDuration = (hornResult.duration || 1.6) + 0.35; // Horn duration + spatial highway echo tail
+    const totalDuckingDuration = (hornResult.duration || 1.55) + 0.35;
     if (window.musicPlayer && typeof window.musicPlayer.duckVolume === 'function') {
       window.musicPlayer.duckVolume(totalDuckingDuration);
     }
@@ -5287,12 +4758,12 @@ class VisualsEngine {
     ctx.lineTo(roadCenterX + roadBottomWidth / 2, h);
     ctx.stroke();
 
-    // Wet Road Specular Sheen (Reflecting Headlights & Storm Ambiance)
+    // Wet Road Texture (Dark sleek wet asphalt, zero neon glow)
     if (isRain) {
       const wetSheen = ctx.createLinearGradient(0, horizon, 0, h);
-      wetSheen.addColorStop(0, 'rgba(15, 23, 42, 0)');
-      wetSheen.addColorStop(0.5, 'rgba(56, 189, 248, 0.05)');
-      wetSheen.addColorStop(1, 'rgba(255, 255, 255, 0.10)');
+      wetSheen.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      wetSheen.addColorStop(0.5, 'rgba(4, 7, 14, 0.25)'); // Dark moisture pooling
+      wetSheen.addColorStop(1, 'rgba(2, 5, 10, 0.35)');
       ctx.fillStyle = wetSheen;
       ctx.beginPath();
       ctx.moveTo(roadCenterX - roadTopWidth / 2, horizon);
@@ -5330,8 +4801,10 @@ class VisualsEngine {
       ctx.fill();
     }
 
-    // 8. POWERFUL HIGH-INTENSITY HEADLIGHT GLOW COVERING THE ROAD (PROMINENT ILLUMINATION)
-    if (isNight || isSunset || isDawn || this.isRainActive) {
+    // 8. HIGHWAY HEADLIGHT ILLUMINATION (AUTHENTIC NON-GLOWING BEAM)
+    // Only illuminate when dark/sunset/dawn. In rain, wet asphalt absorbs light; prevent overblown road glow!
+    const needsHeadlights = isNight || isSunset || isDawn;
+    if (needsHeadlights) {
       ctx.save();
       // Clip headlight illumination to the asphalt road polygon
       ctx.beginPath();
@@ -5342,32 +4815,31 @@ class VisualsEngine {
       ctx.closePath();
       ctx.clip();
 
-      const beamAlpha = isNight ? 0.86 : (isSunset ? 0.68 : (this.isRainActive ? 0.78 : 0.52));
-      const beamFocusY = horizon + (h - horizon) * 0.12; // Far-reaching deep illumination down the highway!
+      // Calibrated alpha that stays realistic and NEVER clamps or blows out into glowing road
+      const beamAlpha = isNight ? (isRain ? 0.32 : 0.60) : (isSunset ? (isRain ? 0.22 : 0.42) : 0.20);
+      const beamFocusY = horizon + (h - horizon) * 0.12;
 
-      // Primary Forward Projector Light Field (Broad High-Intensity Road Surface Illumination)
+      // Primary Forward Projector Light Field (Soft, natural warm halogen road beam)
       const forwardBeam = ctx.createRadialGradient(
         roadCenterX, h * 0.99, 30,
         roadCenterX, beamFocusY, roadBottomWidth * 0.88
       );
-      forwardBeam.addColorStop(0, `rgba(255, 252, 235, ${beamAlpha * 1.55})`);
-      forwardBeam.addColorStop(0.22, `rgba(254, 240, 138, ${beamAlpha * 1.15})`);
-      forwardBeam.addColorStop(0.55, `rgba(250, 204, 21, ${beamAlpha * 0.65})`);
-      forwardBeam.addColorStop(0.85, `rgba(234, 179, 8, ${beamAlpha * 0.28})`);
+      forwardBeam.addColorStop(0, `rgba(254, 243, 199, ${beamAlpha * 0.60})`);
+      forwardBeam.addColorStop(0.25, `rgba(253, 230, 138, ${beamAlpha * 0.35})`);
+      forwardBeam.addColorStop(0.60, `rgba(245, 158, 11, ${beamAlpha * 0.12})`);
       forwardBeam.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = forwardBeam;
       ctx.fillRect(0, horizon, w, h - horizon);
 
-      // Dual High-Beam Halogen Cones from Commercial Bus Headlights (Left & Right Lanes)
+      // Dual Halogen Cones from Bus Headlights
       const leftLightX = roadCenterX - roadBottomWidth * 0.28;
       const rightLightX = roadCenterX + roadBottomWidth * 0.28;
 
       [leftLightX, rightLightX].forEach((lx, idx) => {
         const aimOffset = (idx === 0 ? -1 : 1) * (roadTopWidth * 0.5);
         const coneGrad = ctx.createRadialGradient(lx, h, 15, roadCenterX + aimOffset, beamFocusY, w * 0.52);
-        coneGrad.addColorStop(0, `rgba(255, 255, 245, ${beamAlpha * 1.45})`);
-        coneGrad.addColorStop(0.30, `rgba(254, 240, 138, ${beamAlpha * 0.85})`);
-        coneGrad.addColorStop(0.68, `rgba(251, 191, 36, ${beamAlpha * 0.35})`);
+        coneGrad.addColorStop(0, `rgba(255, 255, 240, ${beamAlpha * 0.50})`);
+        coneGrad.addColorStop(0.35, `rgba(254, 240, 138, ${beamAlpha * 0.25})`);
         coneGrad.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = coneGrad;
         ctx.beginPath();
@@ -5379,13 +4851,15 @@ class VisualsEngine {
         ctx.fill();
       });
 
-      // Foreground Asphalt Specular Texture Sheen
-      const asphaltSheen = ctx.createLinearGradient(0, h * 0.65, 0, h);
-      asphaltSheen.addColorStop(0, 'rgba(254, 240, 138, 0)');
-      asphaltSheen.addColorStop(0.6, `rgba(255, 250, 200, ${beamAlpha * 0.22})`);
-      asphaltSheen.addColorStop(1, `rgba(255, 255, 240, ${beamAlpha * 0.42})`);
-      ctx.fillStyle = asphaltSheen;
-      ctx.fillRect(0, h * 0.65, w, h * 0.35);
+      // Foreground Asphalt Specular Texture Sheen (Only in dry weather, never when raining)
+      if (!isRain) {
+        const asphaltSheen = ctx.createLinearGradient(0, h * 0.65, 0, h);
+        asphaltSheen.addColorStop(0, 'rgba(254, 240, 138, 0)');
+        asphaltSheen.addColorStop(0.6, `rgba(255, 250, 200, ${beamAlpha * 0.15})`);
+        asphaltSheen.addColorStop(1, `rgba(255, 255, 240, ${beamAlpha * 0.26})`);
+        ctx.fillStyle = asphaltSheen;
+        ctx.fillRect(0, h * 0.65, w, h * 0.35);
+      }
 
       ctx.restore();
     }
@@ -7275,20 +6749,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let isAutoHornActive = false;
   let autoHornInterval = null;
 
-  function triggerAirHornBlast() {
+    function triggerAirHornBlast() {
     if (window.pressureHornSystem) {
-      const curTrack = window.musicPlayer ? window.musicPlayer.currentTrack : null;
-      const res = window.pressureHornSystem.blowHorn(curTrack);
-      if (res) {
-        if (res.type === 'hook') {
-          showToast(`BLOW HORN: "${res.name}" Musical Hook!`);
-        } else {
-          showToast(`BLOW HORN: ${res.name} (${res.description})`);
-        }
-      }
+      window.pressureHornSystem.blowHorn();
+      showToast('HIGHWAY AIR HORN (Horn OK Please)');
     } else if (window.audioEngine) {
-      const trackTitle = window.audioEngine.playTruckAirHorn();
-      showToast(`BLOW HORN: "${trackTitle}" PA Horn Blast!`);
+      window.audioEngine.playTruckAirHorn();
+      showToast('HIGHWAY AIR HORN (Horn OK Please)');
     }
   }
 
@@ -7308,7 +6775,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (badge) badge.textContent = isAutoHornActive ? 'ON' : 'OFF';
 
       if (isAutoHornActive) {
-        showToast('Auto Horn Active: Periodic blasts on highway');
+        showToast('Auto Air Horn: Periodic highway blasts');
         clearInterval(autoHornInterval);
         autoHornInterval = setInterval(() => {
           if (window.musicPlayer && window.musicPlayer.isPlaying && window.musicPlayer.currentMode === 'driver') {
@@ -7317,7 +6784,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 35000);
       } else {
         clearInterval(autoHornInterval);
-        showToast('Auto Horn Disabled');
+        showToast('Auto Air Horn Disabled');
       }
     });
   }

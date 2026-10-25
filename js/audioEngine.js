@@ -355,88 +355,43 @@ class AudioEngine {
     ];
   }
 
-  // Play Song Melodic Hook via Truck Rooftop PA Pressure Horn
-  // Uses WaveShaper distortion (100) + 1200Hz Bandpass filter as in PA Horn Converter
-  playSongHookHorn(track) {
-    this.init();
-    if (this.isMuted) return null;
-
-    const currentTrack = track || (window.musicPlayer ? window.musicPlayer.currentTrack : null);
-    const melody = this.getSongHookMelody(currentTrack);
-    const t = this.ctx.currentTime;
-
-    // 1. Create Distortion (overdriven / blown-out metallic horn speaker rasp)
-    const distortionNode = this.ctx.createWaveShaper();
-    distortionNode.curve = this.makeDistortionCurve(100);
-    distortionNode.oversample = '4x';
-
-    // 2. Create Bandpass Filter (Limits frequency to sounding like an authentic PA horn speaker)
-    const filterNode = this.ctx.createBiquadFilter();
-    filterNode.type = 'bandpass';
-    filterNode.frequency.setValueAtTime(1200, t);
-    filterNode.Q.setValueAtTime(2.5, t);
-
-    // Master horn gain
-    const hornMasterGain = this.ctx.createGain();
-    hornMasterGain.gain.setValueAtTime(0.38 * this.volumes.sfx, t);
-
-    // Chain: Distortion -> Bandpass -> Gain -> Master
-    distortionNode.connect(filterNode);
-    filterNode.connect(hornMasterGain);
-    hornMasterGain.connect(this.masterGain);
-
-    melody.forEach(note => {
-      const startTime = t + note.time;
-      const endTime = startTime + note.dur;
-
-      // Primary horn oscillator
-      const osc1 = this.ctx.createOscillator();
-      osc1.type = 'sawtooth';
-      osc1.frequency.setValueAtTime(note.freq, startTime);
-      osc1.detune.setValueAtTime(-5, startTime);
-
-      // Brass harmonic fifth oscillator (for musical air-horn warmth)
-      const osc2 = this.ctx.createOscillator();
-      osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(note.freq * 1.498, startTime);
-      osc2.detune.setValueAtTime(7, startTime);
-
-      // Sub-harmonic body punch
-      const oscSub = this.ctx.createOscillator();
-      oscSub.type = 'triangle';
-      oscSub.frequency.setValueAtTime(note.freq * 0.5, startTime);
-
-      // Note envelope
-      const noteGain = this.ctx.createGain();
-      noteGain.gain.setValueAtTime(0.001, startTime);
-      noteGain.gain.linearRampToValueAtTime(1.0, startTime + 0.015);
-      noteGain.gain.setValueAtTime(0.95, endTime - 0.03);
-      noteGain.gain.exponentialRampToValueAtTime(0.001, endTime);
-
-      osc1.connect(noteGain);
-      osc2.connect(noteGain);
-      oscSub.connect(noteGain);
-
-      noteGain.connect(distortionNode);
-
-      osc1.start(startTime);
-      osc2.start(startTime);
-      oscSub.start(startTime);
-
-      osc1.stop(endTime);
-      osc2.stop(endTime);
-      oscSub.stop(endTime);
-    });
-
-    return currentTrack ? currentTrack.title : 'Highway Classic';
+  // Play Air Horn (triggers modular PressureHornSystem with single signature trumpet)
+  playTruckAirHorn() {
+    if (window.pressureHornSystem) {
+      return window.pressureHornSystem.blowHorn();
+    }
+    return this.playSingleHighwayHorn();
   }
 
-  // Play Air Horn (triggers modular PressureHornSystem with realism pipeline, fallbacks, and ducking)
-  playTruckAirHorn(track) {
-    if (window.pressureHornSystem) {
-      return window.pressureHornSystem.blowHorn(track);
-    }
-    return this.playSongHookHorn(track);
+  playSingleHighwayHorn() {
+    this.init();
+    if (this.isMuted) return null;
+    const t = this.ctx.currentTime;
+    const dur = 1.55;
+
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const oscSub = this.ctx.createOscillator();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(185, t);
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(233.08, t);
+    oscSub.type = 'triangle';
+    oscSub.frequency.setValueAtTime(92.5, t);
+
+    const g = this.ctx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.linearRampToValueAtTime(0.42 * this.volumes.sfx, t + 0.02);
+    g.gain.setValueAtTime(0.38 * this.volumes.sfx, t + dur - 0.2);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+    osc1.connect(g); osc2.connect(g); oscSub.connect(g);
+    g.connect(this.masterGain);
+
+    osc1.start(t); osc2.start(t); oscSub.start(t);
+    osc1.stop(t + dur); osc2.stop(t + dur); oscSub.stop(t + dur);
+    return 'Highway Air Horn';
   }
 
   // Single Quick "Peep" Horn (Overtaking horn)

@@ -695,12 +695,12 @@ class VisualsEngine {
     ctx.lineTo(roadCenterX + roadBottomWidth / 2, h);
     ctx.stroke();
 
-    // Wet Road Specular Sheen (Reflecting Headlights & Storm Ambiance)
+    // Wet Road Texture (Dark sleek wet asphalt, zero neon glow)
     if (isRain) {
       const wetSheen = ctx.createLinearGradient(0, horizon, 0, h);
-      wetSheen.addColorStop(0, 'rgba(15, 23, 42, 0)');
-      wetSheen.addColorStop(0.5, 'rgba(56, 189, 248, 0.05)');
-      wetSheen.addColorStop(1, 'rgba(255, 255, 255, 0.10)');
+      wetSheen.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      wetSheen.addColorStop(0.5, 'rgba(4, 7, 14, 0.25)'); // Dark moisture pooling
+      wetSheen.addColorStop(1, 'rgba(2, 5, 10, 0.35)');
       ctx.fillStyle = wetSheen;
       ctx.beginPath();
       ctx.moveTo(roadCenterX - roadTopWidth / 2, horizon);
@@ -738,8 +738,10 @@ class VisualsEngine {
       ctx.fill();
     }
 
-    // 8. POWERFUL HIGH-INTENSITY HEADLIGHT GLOW COVERING THE ROAD (PROMINENT ILLUMINATION)
-    if (isNight || isSunset || isDawn || this.isRainActive) {
+    // 8. HIGHWAY HEADLIGHT ILLUMINATION (AUTHENTIC NON-GLOWING BEAM)
+    // Only illuminate when dark/sunset/dawn. In rain, wet asphalt absorbs light; prevent overblown road glow!
+    const needsHeadlights = isNight || isSunset || isDawn;
+    if (needsHeadlights) {
       ctx.save();
       // Clip headlight illumination to the asphalt road polygon
       ctx.beginPath();
@@ -750,32 +752,31 @@ class VisualsEngine {
       ctx.closePath();
       ctx.clip();
 
-      const beamAlpha = isNight ? 0.86 : (isSunset ? 0.68 : (this.isRainActive ? 0.78 : 0.52));
-      const beamFocusY = horizon + (h - horizon) * 0.12; // Far-reaching deep illumination down the highway!
+      // Calibrated alpha that stays realistic and NEVER clamps or blows out into glowing road
+      const beamAlpha = isNight ? (isRain ? 0.32 : 0.60) : (isSunset ? (isRain ? 0.22 : 0.42) : 0.20);
+      const beamFocusY = horizon + (h - horizon) * 0.12;
 
-      // Primary Forward Projector Light Field (Broad High-Intensity Road Surface Illumination)
+      // Primary Forward Projector Light Field (Soft, natural warm halogen road beam)
       const forwardBeam = ctx.createRadialGradient(
         roadCenterX, h * 0.99, 30,
         roadCenterX, beamFocusY, roadBottomWidth * 0.88
       );
-      forwardBeam.addColorStop(0, `rgba(255, 252, 235, ${beamAlpha * 1.55})`);
-      forwardBeam.addColorStop(0.22, `rgba(254, 240, 138, ${beamAlpha * 1.15})`);
-      forwardBeam.addColorStop(0.55, `rgba(250, 204, 21, ${beamAlpha * 0.65})`);
-      forwardBeam.addColorStop(0.85, `rgba(234, 179, 8, ${beamAlpha * 0.28})`);
+      forwardBeam.addColorStop(0, `rgba(254, 243, 199, ${beamAlpha * 0.60})`);
+      forwardBeam.addColorStop(0.25, `rgba(253, 230, 138, ${beamAlpha * 0.35})`);
+      forwardBeam.addColorStop(0.60, `rgba(245, 158, 11, ${beamAlpha * 0.12})`);
       forwardBeam.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = forwardBeam;
       ctx.fillRect(0, horizon, w, h - horizon);
 
-      // Dual High-Beam Halogen Cones from Commercial Bus Headlights (Left & Right Lanes)
+      // Dual Halogen Cones from Bus Headlights
       const leftLightX = roadCenterX - roadBottomWidth * 0.28;
       const rightLightX = roadCenterX + roadBottomWidth * 0.28;
 
       [leftLightX, rightLightX].forEach((lx, idx) => {
         const aimOffset = (idx === 0 ? -1 : 1) * (roadTopWidth * 0.5);
         const coneGrad = ctx.createRadialGradient(lx, h, 15, roadCenterX + aimOffset, beamFocusY, w * 0.52);
-        coneGrad.addColorStop(0, `rgba(255, 255, 245, ${beamAlpha * 1.45})`);
-        coneGrad.addColorStop(0.30, `rgba(254, 240, 138, ${beamAlpha * 0.85})`);
-        coneGrad.addColorStop(0.68, `rgba(251, 191, 36, ${beamAlpha * 0.35})`);
+        coneGrad.addColorStop(0, `rgba(255, 255, 240, ${beamAlpha * 0.50})`);
+        coneGrad.addColorStop(0.35, `rgba(254, 240, 138, ${beamAlpha * 0.25})`);
         coneGrad.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = coneGrad;
         ctx.beginPath();
@@ -787,13 +788,15 @@ class VisualsEngine {
         ctx.fill();
       });
 
-      // Foreground Asphalt Specular Texture Sheen
-      const asphaltSheen = ctx.createLinearGradient(0, h * 0.65, 0, h);
-      asphaltSheen.addColorStop(0, 'rgba(254, 240, 138, 0)');
-      asphaltSheen.addColorStop(0.6, `rgba(255, 250, 200, ${beamAlpha * 0.22})`);
-      asphaltSheen.addColorStop(1, `rgba(255, 255, 240, ${beamAlpha * 0.42})`);
-      ctx.fillStyle = asphaltSheen;
-      ctx.fillRect(0, h * 0.65, w, h * 0.35);
+      // Foreground Asphalt Specular Texture Sheen (Only in dry weather, never when raining)
+      if (!isRain) {
+        const asphaltSheen = ctx.createLinearGradient(0, h * 0.65, 0, h);
+        asphaltSheen.addColorStop(0, 'rgba(254, 240, 138, 0)');
+        asphaltSheen.addColorStop(0.6, `rgba(255, 250, 200, ${beamAlpha * 0.15})`);
+        asphaltSheen.addColorStop(1, `rgba(255, 255, 240, ${beamAlpha * 0.26})`);
+        ctx.fillStyle = asphaltSheen;
+        ctx.fillRect(0, h * 0.65, w, h * 0.35);
+      }
 
       ctx.restore();
     }
