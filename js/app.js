@@ -79,6 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (window.musicPlayer) {
     window.musicPlayer.init();
+
+    // Preload authentic highway air horns on first user touch / interaction
+    const preloadHorns = () => {
+      if (window.pressureHornSystem) window.pressureHornSystem.init();
+    };
+    document.addEventListener('pointerdown', preloadHorns, { once: true });
+    document.addEventListener('keydown', preloadHorns, { once: true });
   }
 
   // 2. Set Initial Mode

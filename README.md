@@ -145,6 +145,8 @@ Safar-And-Saloon/
 │   ├── pressureHorn.js        # Multi-tone highway air horn synthesizer
 │   └── visuals.js             # 60 FPS HTML5 Canvas engine (Highway 3D & Saloon interior)
 ├── sounds/
+│   ├── highway_air_horn_1.mp3 # Authentic Indian commercial highway truck air horn (Tune 1)
+│   ├── highway_air_horn_2.mp3 # Authentic Indian interstate truck melody air horn (Tune 2)
 │   ├── classic_single_tone.wav
 │   ├── reverse_siren.wav
 │   ├── sharp_city_clipper.wav

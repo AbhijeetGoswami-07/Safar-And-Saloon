@@ -1,18 +1,16 @@
 /**
  * SAFAR & SALOON: HIGHWAY PRESSURE AIR HORN ENGINE
- * Single Signature Indian Commercial Truck Pressure Air Horn (Horn OK Please)
+ * High-Pressure Authentic Indian Commercial Truck Air Horns (Horn OK Please)
  *
- * Realism Audio Graph Pipeline:
- * [Input Gain] -> [Body Resonance Filter (340Hz)] -> [WaveShaper Saturation]
- *       |---> [Spatial Highway Delay (Stereo 68ms / 128ms)] ---> [Feedback]
- *       |---> [Dry Gain] -----------------------------------------> [Master Gain]
+ * Supports user-provided multi-tone highway horns with seamless preloading,
+ * zero-latency playback, alternating tune cycles, volume ducking, and procedural fallback.
  */
 
 class PressureHornSystem {
   constructor() {
     this.ctx = null;
     this.isMuted = false;
-    this.volume = 0.85;
+    this.volume = 0.90;
 
     // Pipeline Nodes
     this.inputGain = null;
@@ -20,18 +18,36 @@ class PressureHornSystem {
     this.saturationNode = null;
     this.masterGain = null;
 
-    // Single Signature Audio Buffer Cache
-    this.assetBuffer = null;
-    this.isLoadingAsset = false;
+    // Currently Playing Source Node (prevents overlapping clashes)
+    this.currentSourceNode = null;
+    this.currentGainNode = null;
 
-    // Single Unified Highway Pressure Horn Definition
-    this.singleHorn = {
-      id: 'classic-single-tone',
-      name: 'Highway Pressure Air Horn',
-      description: 'Single Authentic Indian Interstate Truck Trumpet',
-      assetUrl: 'sounds/classic_single_tone.wav',
-      duration: 1.55
-    };
+    // Dual Authentic Highway Horn Definitions (Uploaded by User)
+    this.horns = [
+      {
+        id: 'highway-air-horn-1',
+        name: 'Highway Pressure Air Horn (Tune 1)',
+        description: 'Authentic Indian Commercial Highway Truck Air Horn',
+        assetUrl: 'sounds/highway_air_horn_1.mp3',
+        duration: 11.6
+      },
+      {
+        id: 'highway-air-horn-2',
+        name: 'Highway Pressure Air Horn (Tune 2)',
+        description: 'Authentic Indian Interstate Truck Melody Horn',
+        assetUrl: 'sounds/highway_air_horn_2.mp3',
+        duration: 11.0
+      }
+    ];
+
+    // Audio Buffer Caches
+    this.assetBuffers = [];
+    this.assetBuffer = null; // Backwards compatibility
+    this.activeHornIndex = 0;
+    this.isLoadingAssets = false;
+
+    // Default definition fallback
+    this.singleHorn = this.horns[0];
   }
 
   // Lazy Initialization of AudioContext and Realism Pipeline
@@ -56,7 +72,7 @@ class PressureHornSystem {
     }
 
     this.buildRealismPipeline();
-    this.preloadSingleAsset();
+    this.preloadAssets();
   }
 
   // Make Soft-Clipping Saturation Curve for Diaphragm Air Pressure
@@ -91,7 +107,7 @@ class PressureHornSystem {
     this.saturationNode.curve = this.makeDistortionCurve(28);
     this.saturationNode.oversample = '4x';
 
-    // 3. Spatial Highway Stereo Echo (Dual-tap delay)
+    // 3. Spatial Highway Stereo Echo (Dual-tap delay for outdoor ambient realism)
     const delayL = ctx.createDelay();
     const delayR = ctx.createDelay();
     delayL.delayTime.setValueAtTime(0.068, ctx.currentTime);
@@ -107,10 +123,10 @@ class PressureHornSystem {
     echoFilter.frequency.setValueAtTime(1400, ctx.currentTime);
 
     const dryGain = ctx.createGain();
-    dryGain.gain.setValueAtTime(0.82, ctx.currentTime);
+    dryGain.gain.setValueAtTime(0.85, ctx.currentTime);
 
     const wetGain = ctx.createGain();
-    wetGain.gain.setValueAtTime(0.32, ctx.currentTime);
+    wetGain.gain.setValueAtTime(0.25, ctx.currentTime);
 
     const splitter = ctx.createChannelSplitter(2);
     const merger = ctx.createChannelMerger(2);
@@ -152,28 +168,42 @@ class PressureHornSystem {
     }
   }
 
-  // Preload the Single Highway Air Horn Sound Asset
-  async preloadSingleAsset() {
-    if (this.isLoadingAsset || this.assetBuffer) return;
-    this.isLoadingAsset = true;
+  // Preload Both Authentic Highway Air Horn Audio Assets
+  async preloadAssets() {
+    if (this.isLoadingAssets || this.assetBuffers.length === this.horns.length) return;
+    this.isLoadingAssets = true;
 
-    try {
-      const resp = await fetch(this.singleHorn.assetUrl);
-      if (resp.ok) {
-        const arrayBuf = await resp.arrayBuffer();
-        this.assetBuffer = await this.ctx.decodeAudioData(arrayBuf);
+    for (let i = 0; i < this.horns.length; i++) {
+      const horn = this.horns[i];
+      if (this.assetBuffers[i]) continue;
+
+      try {
+        const resp = await fetch(horn.assetUrl);
+        if (resp.ok) {
+          const arrayBuf = await resp.arrayBuffer();
+          const decoded = await this.ctx.decodeAudioData(arrayBuf);
+          this.assetBuffers[i] = decoded;
+          if (i === 0) {
+            this.assetBuffer = decoded;
+          }
+        }
+      } catch (err) {
+        console.warn(`Could not preload horn audio asset [${horn.assetUrl}]:`, err.message);
       }
-    } catch (err) {
-      console.warn('Procedural synthesizer active for highway air horn:', err.message);
-    } finally {
-      this.isLoadingAsset = false;
     }
+
+    this.isLoadingAssets = false;
   }
 
-  // Synthesize Single Iconic Indian Highway Pressure Air Horn
+  // Backward compatibility alias
+  preloadSingleAsset() {
+    return this.preloadAssets();
+  }
+
+  // Synthesize Procedural Fallback Horn
   synthesizeSingleHorn(t) {
     const ctx = this.ctx;
-    const dur = this.singleHorn.duration;
+    const dur = 1.6;
 
     // Dual Trumpet Harmonics (F#3 fundamental @ 185Hz, Bb3 minor 3rd @ 233Hz, F#4 @ 370Hz)
     const osc1 = ctx.createOscillator();
@@ -224,38 +254,89 @@ class PressureHornSystem {
     const t = this.ctx.currentTime;
     let hornResult = null;
 
-    // 1. Play Preloaded High-Fidelity Audio Buffer if Available
-    if (this.assetBuffer) {
+    // 1. Stop any currently playing horn instance to avoid clashing overlaps
+    if (this.currentSourceNode) {
+      try {
+        if (this.currentGainNode) {
+          this.currentGainNode.gain.setValueAtTime(this.currentGainNode.gain.value, t);
+          this.currentGainNode.gain.linearRampToValueAtTime(0.001, t + 0.05);
+        }
+        this.currentSourceNode.stop(t + 0.05);
+      } catch (e) {}
+      this.currentSourceNode = null;
+      this.currentGainNode = null;
+    }
+
+    // 2. Select buffer (alternating between user's authentic horn recordings)
+    const hornIdx = this.activeHornIndex % this.horns.length;
+    const hornDef = this.horns[hornIdx];
+    const buffer = this.assetBuffers[hornIdx] || this.assetBuffer || this.assetBuffers[0];
+
+    // Cycle to next tune for subsequent horn blasts
+    this.activeHornIndex = (this.activeHornIndex + 1) % this.horns.length;
+
+    if (buffer) {
+      // High-Fidelity Audio Buffer Playback
       const source = this.ctx.createBufferSource();
-      source.buffer = this.assetBuffer;
+      source.buffer = buffer;
 
       const gain = this.ctx.createGain();
-      gain.gain.setValueAtTime(0.95, t);
+      gain.gain.setValueAtTime(1.0, t);
 
+      // Connect directly to masterGain for maximum clarity, plus subtle spatial echo
       source.connect(gain);
-      gain.connect(this.inputGain);
+      gain.connect(this.masterGain);
+
+      // Subtle atmospheric echo
+      if (this.inputGain) {
+        const echoSend = this.ctx.createGain();
+        echoSend.gain.setValueAtTime(0.18, t);
+        gain.connect(echoSend);
+        echoSend.connect(this.inputGain);
+      }
+
+      this.currentSourceNode = source;
+      this.currentGainNode = gain;
+
+      source.onended = () => {
+        if (this.currentSourceNode === source) {
+          this.currentSourceNode = null;
+          this.currentGainNode = null;
+        }
+      };
+
       source.start(t);
 
       hornResult = {
-        type: 'single',
-        name: 'Highway Air Horn',
-        description: 'Classic High-Pressure Indian Interstate Truck Horn',
-        duration: this.singleHorn.duration
+        type: 'authentic',
+        name: hornDef.name,
+        description: hornDef.description,
+        duration: buffer.duration || hornDef.duration
       };
     } else {
-      // 2. Procedural Realism Synthesizer Fallback
-      this.synthesizeSingleHorn(t);
-      hornResult = {
-        type: 'single',
-        name: 'Highway Air Horn',
-        description: 'Classic High-Pressure Indian Interstate Truck Horn',
-        duration: this.singleHorn.duration
-      };
+      // Fallback: Check if HTML5 audio is possible or use procedural synthesizer
+      try {
+        const audio = new Audio(hornDef.assetUrl);
+        audio.volume = this.volume;
+        audio.play().catch(() => {});
+        hornResult = {
+          type: 'html5',
+          name: hornDef.name,
+          duration: hornDef.duration
+        };
+      } catch (e) {
+        this.synthesizeSingleHorn(t);
+        hornResult = {
+          type: 'synthesized',
+          name: 'Highway Air Horn',
+          duration: 1.6
+        };
+      }
     }
 
     // 3. Audio Ducking Transition:
-    // Instantly dip main music volume over 0.05s, then smoothly restore once echo tail ends
-    const totalDuckingDuration = (hornResult.duration || 1.55) + 0.35;
+    // Instantly dip main YouTube music volume, then smoothly restore once horn ends
+    const totalDuckingDuration = (hornResult.duration || 11.2) + 0.35;
     if (window.musicPlayer && typeof window.musicPlayer.duckVolume === 'function') {
       window.musicPlayer.duckVolume(totalDuckingDuration);
     }
