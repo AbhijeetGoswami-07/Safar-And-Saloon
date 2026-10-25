@@ -119,12 +119,20 @@ server.listen(PORT, '0.0.0.0', () => {
   <meta name="keywords" content="bus driver playlist, deluxe saloon music, 90s hindi songs, bus driver website, saloon playlist, kumar sanu, alka yagnik, retro bollywood radio, indian highway radio, nh 48 songs">
   <meta name="theme-color" content="#090d16">
 
+  <!-- Google Fonts: Big Shoulders Display, Big Shoulders Text, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            'big-shoulders': ['"Big Shoulders Display"', '"Big Shoulders"', '"Big Shoulders Text"', 'Impact', 'sans-serif'],
+          },
           colors: {
             ember: '#f59e0b',
             saloonTeal: '#14b8a6',
@@ -230,7 +238,7 @@ server.listen(PORT, '0.0.0.0', () => {
   <main class="relative z-10 flex flex-col items-center justify-start px-4 text-center select-none pt-0 pointer-events-none">
 
     <!-- Dynamic Hero Headline (Cleanly positioned high so the scene is completely visible) -->
-    <h1 id="heroTitle" class="hero-title-headline font-big-shoulders text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-widest leading-none drop-shadow-xl mt-0.5 mb-0 select-none">
+    <h1 id="heroTitle" class="hero-title-headline font-big-shoulders select-none">
       BUS DRIVER
     </h1>
 
@@ -759,29 +767,32 @@ server.listen(PORT, '0.0.0.0', () => {
 /* ============================================================================== */
 
 ```css:css/styles.css
-/* ============================================================
- * SAFAR & SALOON - Modern Professional Stylesheet
- * High-precision dual-mode audio player interface
- * Theme 1: Highway Cabin (Deep Slate & Amber)
- * Theme 2: Deluxe Saloon (Deep Onyx & Refined Teal)
- * ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 @font-face {
-  font-family: 'Big Shoulders';
-  src: url('/fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
-       url('../fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
-       url('/fonts/static/BigShoulders_60pt-Black.ttf') format('truetype'),
-       url('../fonts/static/BigShoulders_60pt-Black.ttf') format('truetype');
+  font-family: 'Big Shoulders Display';
+  src: url('../fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
+       url('/fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
+       url('../fonts/static/BigShoulders_60pt-Black.ttf') format('truetype'),
+       url('/fonts/static/BigShoulders_60pt-Black.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Big Shoulders';
+  src: url('../fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
+       url('/fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype-variations'),
+       url('../fonts/static/BigShoulders_60pt-Black.ttf') format('truetype'),
+       url('/fonts/static/BigShoulders_60pt-Black.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 .font-big-shoulders {
-  font-family: 'Big Shoulders', 'Big Shoulders Display', sans-serif;
-  letter-spacing: 0.03em;
+  font-family: 'Big Shoulders Display', 'Big Shoulders', 'Big Shoulders Text', 'Impact', sans-serif !important;
   text-transform: uppercase;
 }
 
@@ -1202,18 +1213,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .hero-title-headline {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-  line-height: 1 !important;
-  font-size: clamp(2.2rem, 5.5vw, 4.2rem) !important;
-  letter-spacing: 2.5px !important;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+  padding: 0 !important;
+  font-family: 'Big Shoulders Display', 'Big Shoulders', 'Big Shoulders Text', 'Impact', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: clamp(3.6rem, 8.5vw, 6.8rem) !important;
+  line-height: 0.84 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.95), 0 8px 32px rgba(0, 0, 0, 0.9), 0 0 35px rgba(245, 158, 11, 0.35) !important;
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 body.theme-saloon .hero-title-headline {
-  font-size: clamp(1.8rem, 4vw, 3.2rem) !important;
-  letter-spacing: 3.5px !important;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.95) !important;
+  font-size: clamp(3.4rem, 8vw, 6.4rem) !important;
+  letter-spacing: 0.05em !important;
   color: #fef3c7 !important;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.98), 0 8px 36px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.4), 0 0 10px rgba(20, 184, 166, 0.3) !important;
 }
 
 /* ============================================================

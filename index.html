@@ -9,12 +9,20 @@
   <meta name="keywords" content="bus driver playlist, deluxe saloon music, 90s hindi songs, bus driver website, saloon playlist, kumar sanu, alka yagnik, retro bollywood radio, indian highway radio, nh 48 songs">
   <meta name="theme-color" content="#090d16">
 
+  <!-- Google Fonts: Big Shoulders Display, Big Shoulders Text, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            'big-shoulders': ['"Big Shoulders Display"', '"Big Shoulders"', '"Big Shoulders Text"', 'Impact', 'sans-serif'],
+          },
           colors: {
             ember: '#f59e0b',
             saloonTeal: '#14b8a6',
@@ -120,7 +128,7 @@
   <main class="relative z-10 flex flex-col items-center justify-start px-4 text-center select-none pt-0 pointer-events-none">
 
     <!-- Dynamic Hero Headline (Cleanly positioned high so the scene is completely visible) -->
-    <h1 id="heroTitle" class="hero-title-headline font-big-shoulders text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-widest leading-none drop-shadow-xl mt-0.5 mb-0 select-none">
+    <h1 id="heroTitle" class="hero-title-headline font-big-shoulders select-none">
       BUS DRIVER
     </h1>
 
