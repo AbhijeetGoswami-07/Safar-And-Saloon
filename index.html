@@ -33,7 +33,7 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.7">
+  <link rel="stylesheet" href="css/styles.css?v=2.8">
 </head>
 <body class="h-full flex flex-col justify-between relative selection:bg-amber-500/30 selection:text-white">
 
@@ -223,11 +223,23 @@
       </button>
     </div>
 
-        <!-- STATIONS DOCK (Sleek Station Selector with Full Name Visibility & Smooth Scrolling) -->
+        <!-- STATIONS DOCK (Sleek Station Selector with Slide Arrows, Drag-to-Slide & Smooth Scrolling) -->
     <div class="stations-dock-wrapper">
-      <div id="stationsNav" class="stations-dock-scroll no-scrollbar">
+      <button id="dockSlideLeftBtn" type="button" class="dock-slide-arrow dock-arrow-left is-disabled" aria-label="Slide to previous stations" title="Previous stations">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div id="stationsNav" class="stations-dock-scroll" tabindex="0" role="region" aria-label="Radio Stations">
         <!-- Dynamically filled with station pills -->
       </div>
+
+      <button id="dockSlideRightBtn" type="button" class="dock-slide-arrow dock-arrow-right" aria-label="Slide to next stations" title="Next stations">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
     </div>
 
     <!-- Main Universal Audio Deck Frame -->
@@ -639,12 +651,12 @@
 
 
   <!-- Application Scripts -->
-  <script src="js/audioEngine.js?v=2.7"></script>
-  <script src="js/playlistData.js?v=2.7"></script>
-  <script src="js/visuals.js?v=2.7"></script>
-  <script src="js/player.js?v=2.7"></script>
-  <script src="js/pressureHorn.js?v=2.7"></script>
-  <script src="js/app.js?v=2.7"></script>
+  <script src="js/audioEngine.js?v=2.8"></script>
+  <script src="js/playlistData.js?v=2.8"></script>
+  <script src="js/visuals.js?v=2.8"></script>
+  <script src="js/player.js?v=2.8"></script>
+  <script src="js/pressureHorn.js?v=2.8"></script>
+  <script src="js/app.js?v=2.8"></script>
 
 </body>
 </html>

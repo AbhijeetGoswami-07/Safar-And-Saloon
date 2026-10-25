@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderStations();
+    setTimeout(updateDockNavState, 100);
   }
 
   if (modeSwitchDriver) {
@@ -201,14 +202,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ensure first station is always scrolled completely to 0 on initial render or mode switch
     const activeIndex = stations.findIndex(s => s.id === activeStation.id);
-    if (activeIndex === 0) {
+        if (activeIndex === 0) {
       stationsNav.scrollLeft = 0;
+      setTimeout(updateDockNavState, 60);
     } else {
       setTimeout(() => {
         const activeBtn = stationsNav.querySelector('.station-pill.active');
-        if (activeBtn) {
+                if (activeBtn) {
           activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+        setTimeout(updateDockNavState, 350);
       }, 50);
     }
   }
@@ -1057,4 +1060,103 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  /* ============================================================
+   * STATIONS DOCK: SLIDE ARROWS, DRAG-TO-SLIDE & MOUSE WHEEL
+   * ============================================================ */
+
+  const dockSlideLeftBtn = document.getElementById('dockSlideLeftBtn');
+  const dockSlideRightBtn = document.getElementById('dockSlideRightBtn');
+
+  function updateDockNavState() {
+    if (!stationsNav) return;
+    const scrollLeft = stationsNav.scrollLeft;
+    const maxScroll = stationsNav.scrollWidth - stationsNav.clientWidth;
+
+    const canScrollLeft = scrollLeft > 6;
+    const canScrollRight = maxScroll > 6 && scrollLeft < (maxScroll - 6);
+
+    if (dockSlideLeftBtn) {
+      dockSlideLeftBtn.classList.toggle('is-disabled', !canScrollLeft);
+    }
+    if (dockSlideRightBtn) {
+      dockSlideRightBtn.classList.toggle('is-disabled', !canScrollRight);
+    }
+
+    const wrapper = stationsNav.closest('.stations-dock-wrapper');
+    if (wrapper) {
+      wrapper.classList.toggle('has-scroll-left', canScrollLeft);
+      wrapper.classList.toggle('has-scroll-right', canScrollRight);
+    }
+  }
+
+  if (dockSlideLeftBtn) {
+    dockSlideLeftBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!stationsNav) return;
+      stationsNav.scrollBy({ left: -260, behavior: 'smooth' });
+    });
+  }
+
+  if (dockSlideRightBtn) {
+    dockSlideRightBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!stationsNav) return;
+      stationsNav.scrollBy({ left: 260, behavior: 'smooth' });
+    });
+  }
+
+  if (stationsNav) {
+    // 1. Mouse wheel translation (vertical wheel scrolls horizontal bar)
+    stationsNav.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > 0) {
+        e.preventDefault();
+        stationsNav.scrollLeft += e.deltaY * 1.2;
+        updateDockNavState();
+      }
+    }, { passive: false });
+
+    // 2. Click-and-drag to slide (grab & pan)
+    let isMouseDown = false;
+    let startX = 0;
+    let initialScrollLeft = 0;
+    let totalMoved = 0;
+
+    stationsNav.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return; // Only primary mouse button
+      isMouseDown = true;
+      totalMoved = 0;
+      startX = e.clientX;
+      initialScrollLeft = stationsNav.scrollLeft;
+      stationsNav.classList.add('is-dragging');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isMouseDown || !stationsNav) return;
+      const deltaX = e.clientX - startX;
+      totalMoved += Math.abs(deltaX);
+      stationsNav.scrollLeft = initialScrollLeft - deltaX;
+      updateDockNavState();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isMouseDown) {
+        isMouseDown = false;
+        if (stationsNav) stationsNav.classList.remove('is-dragging');
+      }
+    });
+
+    // Suppress station click if user was actively dragging
+    stationsNav.addEventListener('click', (e) => {
+      if (totalMoved > 6) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }, true);
+
+    // Update state on scroll & window resize
+    stationsNav.addEventListener('scroll', updateDockNavState, { passive: true });
+    window.addEventListener('resize', updateDockNavState);
+  }
+
 });
