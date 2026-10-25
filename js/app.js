@@ -327,12 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastText = document.getElementById('toastText');
     if (!toast || !toastText) return;
     toastText.textContent = message;
-    toast.classList.remove('opacity-0', '-translate-y-2');
-    toast.classList.add('opacity-100', 'translate-y-0');
+    toast.classList.add('show');
     clearTimeout(window.__toastTimer);
     window.__toastTimer = setTimeout(() => {
-      toast.classList.remove('opacity-100', 'translate-y-0');
-      toast.classList.add('opacity-0', '-translate-y-2');
+      toast.classList.remove('show');
     }, 2500);
   }
 

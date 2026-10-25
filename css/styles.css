@@ -732,3 +732,49 @@ body.theme-saloon .ticket-notch-left, body.theme-saloon .ticket-notch-right {
     display: none !important;
   }
 }
+
+/* ============================================================
+ * TOAST NOTIFICATION: PERFECT 50% CENTER ALIGNMENT & DYNAMIC THEMES
+ * ============================================================ */
+
+.toast-floating-container {
+  position: fixed;
+  top: 88px;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(-8px);
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-floating-container.show {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.toast-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 22px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #090d16;
+  font-weight: 800;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 25px rgba(245, 158, 11, 0.45);
+  letter-spacing: 0.3px;
+  text-shadow: none;
+}
+
+body.theme-saloon .toast-badge {
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  color: #042f2e;
+  border-color: rgba(255, 255, 255, 0.40);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 25px rgba(20, 184, 166, 0.45);
+}
