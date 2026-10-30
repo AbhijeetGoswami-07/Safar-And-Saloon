@@ -63,6 +63,30 @@ describe('Playlist Data Suite (playlistData.js)', () => {
         });
       });
     });
-    assert.equal(totalCount, 91, 'Should contain exactly 91 curated tracks across both modes');
+    assert.equal(totalCount, 192, 'Should contain exactly 192 curated tracks across both modes');
+  });
+
+  test('Contains all 150 curated user-requested tracks across Hindi, Marathi, and Bhojpuri', () => {
+    const fs = require('fs');
+    const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'parsed_150_raw.json'), 'utf8'));
+    assert.equal(raw.hindi.length, 50);
+    assert.equal(raw.marathi.length, 50);
+    assert.equal(raw.bhojpuri.length, 50);
+
+    const allTrackIds = new Set();
+    ['driver', 'saloon'].forEach(mode => {
+      data[mode].stations.forEach(station => {
+        station.tracks.forEach(track => {
+          allTrackIds.add(track.id);
+        });
+      });
+    });
+
+    const cache = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'verified_150_cache.json'), 'utf8'));
+    assert.equal(Object.keys(cache).length, 150);
+
+    Object.values(cache).forEach(item => {
+      assert.ok(allTrackIds.has(item.id), `Missing verified track in stations: ${item.title} (${item.id})`);
+    });
   });
 });

@@ -54,7 +54,8 @@ describe('MusicPlayer Unit Tests (player.js)', () => {
     assert.equal(player.currentStationId, 'nh48-sleeper');
     assert.equal(player.currentTrackIndex, 0);
     assert.ok(player.currentTrack);
-    assert.equal(player.currentTrack.id, 'fvwyPGBOEgY');
+    const expectedFirstTrackId = global.window.playlistData.driver.stations[0].tracks[0].id;
+    assert.equal(player.currentTrack.id, expectedFirstTrackId);
   });
 
   test('setMode correctly switches between driver and saloon stations', () => {
