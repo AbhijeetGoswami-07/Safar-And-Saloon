@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build": "node scripts/create_playlist_file.js",
+    "test": "node --test test/**/*.test.js"
   },
   "keywords": [
     "bus-driver-playlist",

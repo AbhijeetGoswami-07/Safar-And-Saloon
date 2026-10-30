@@ -496,5 +496,6 @@ class MusicPlayer {
   }
 }
 
-// Export singleton
+// Export singleton and class
+window.MusicPlayer = MusicPlayer;
 window.musicPlayer = new MusicPlayer();

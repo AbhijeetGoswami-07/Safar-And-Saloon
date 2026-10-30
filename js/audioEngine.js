@@ -851,5 +851,6 @@ class AudioEngine {
   }
 }
 
-// Export singleton
+// Export class and singleton
+window.AudioEngine = AudioEngine;
 window.audioEngine = new AudioEngine();

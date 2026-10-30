@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeSwitchDriver = document.getElementById('modeBtnDriver');
   const modeSwitchSaloon = document.getElementById('modeBtnSaloon');
   const heroTitle = document.getElementById('heroTitle');
-  const heroSubtitle = document.getElementById('heroSubtitle');
-  const heroBadge = document.getElementById('heroBadge');
 
   // Interactive Action Containers
   const driverActionsContainer = document.getElementById('driverActions');
@@ -93,32 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
   applyMode(initialMode, false);
 
   /* ============================================================
-   * DYNAMIC HERO BADGE & REAL-TIME SYNC
-   * ============================================================ */
-
-  function updateHeroBadge(mode) {
-    if (!heroBadge) return;
-    if (mode === 'saloon') {
-      heroBadge.textContent = 'DELUXE VILLAGE SALON • SHAVING & GROOMING • EST. 1994';
-    } else {
-      if (window.visualsEngine) {
-        const loc = window.visualsEngine.getCurrentLocation();
-        const tInfo = window.visualsEngine.getTimeOfDay();
-        heroBadge.textContent = `NH-48 • ${loc.city.toUpperCase()} • ${tInfo.timeStr} ${tInfo.label.toUpperCase()}`;
-      } else {
-        heroBadge.textContent = 'HIGHWAY CABIN • NH-48';
-      }
-    }
-  }
-
-  // Periodic refresh for real-time clock & location
-  setInterval(() => {
-    if (window.musicPlayer && window.musicPlayer.currentMode === 'driver') {
-      updateHeroBadge('driver');
-    }
-  }, 30000);
-
-  /* ============================================================
    * MODE SWITCHING LOGIC
    * ============================================================ */
 
@@ -136,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (saloonActionsContainer) saloonActionsContainer.classList.remove('hidden');
 
       if (heroTitle) heroTitle.textContent = 'DELUXE SALOON';
-      updateHeroBadge('saloon');
       const shortcutHorn = document.getElementById('shortcutHornLabel');
       if (shortcutHorn) shortcutHorn.textContent = 'WATER MIST';
     } else {
@@ -148,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (saloonActionsContainer) saloonActionsContainer.classList.add('hidden');
 
       if (heroTitle) heroTitle.textContent = 'BUS DRIVER';
-      updateHeroBadge('driver');
       const shortcutHorn = document.getElementById('shortcutHornLabel');
       if (shortcutHorn) shortcutHorn.textContent = 'BLOW HORN';
     }
@@ -984,7 +954,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (settingsTimeStatus) settingsTimeStatus.textContent = statusText;
         showToast(`Highway Atmosphere: ${statusText}`);
-        updateHeroBadge(window.musicPlayer.currentMode);
       });
     });
   }

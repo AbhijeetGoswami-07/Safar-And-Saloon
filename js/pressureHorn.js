@@ -345,5 +345,6 @@ class PressureHornSystem {
   }
 }
 
-// Instantiate global singleton
+// Export class and singleton
+window.PressureHornSystem = PressureHornSystem;
 window.pressureHornSystem = new PressureHornSystem();

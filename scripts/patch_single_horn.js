@@ -276,6 +276,4 @@ window.pressureHornSystem = new PressureHornSystem();
 
 fs.writeFileSync(path.join(root, 'js', 'pressureHorn.js'), pressureHornCode, 'utf8');
 console.log('Successfully updated js/pressureHorn.js to single horn type!');
-`;
 
-fs.writeFileSync(path.join(root, 'scripts', 'patch_single_horn.js'), Buffer.from(pressureHornCode), 'utf8');
