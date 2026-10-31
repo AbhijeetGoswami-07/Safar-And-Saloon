@@ -18,9 +18,12 @@ describe('Playlist Data Suite (playlistData.js)', () => {
     assert.ok(data.saloon.name.includes('Deluxe Saloon'));
   });
 
-  test('Bus Driver mode has exactly 6 curated stations with valid schemas', () => {
+  test('Bus Driver mode has curated stations with valid schemas (including Marathi Tadka)', () => {
     const stations = data.driver.stations;
-    assert.equal(stations.length, 6);
+    assert.equal(stations.length, 4);
+    assert.ok(stations.find(s => s.id === 'marathi-tadka'), 'Driver mode must contain marathi-tadka station');
+    assert.ok(!stations.find(s => s.id === 'gulzar-ghazals'), 'Driver mode must not contain slow gulzar-ghazals station');
+    assert.ok(!stations.find(s => s.id === 'manache-ghaav'), 'Driver mode must not contain manache-ghaav station');
     const stationIds = new Set();
     stations.forEach(station => {
       assert.ok(station.id);
@@ -36,6 +39,8 @@ describe('Playlist Data Suite (playlistData.js)', () => {
   test('Deluxe Saloon mode has exactly 6 curated stations with valid schemas', () => {
     const stations = data.saloon.stations;
     assert.equal(stations.length, 6);
+    assert.ok(stations.find(s => s.id === 'gulzar-ghazals'), 'Saloon mode preserves relaxing gulzar-ghazals station');
+    assert.ok(stations.find(s => s.id === 'manache-ghaav'), 'Saloon mode preserves soulful manache-ghaav station');
     const stationIds = new Set();
     stations.forEach(station => {
       assert.ok(station.id);
@@ -63,7 +68,7 @@ describe('Playlist Data Suite (playlistData.js)', () => {
         });
       });
     });
-    assert.equal(totalCount, 192, 'Should contain exactly 192 curated tracks across both modes');
+    assert.equal(totalCount, 181, 'Should contain exactly 181 curated tracks across both modes');
   });
 
   test('Contains all 150 curated user-requested tracks across Hindi, Marathi, and Bhojpuri', () => {

@@ -1989,117 +1989,10 @@ window.playlistData = {
         ]
       },
       {
-        "id": "gulzar-ghazals",
-        "name": "Gulzar Ghazals",
-        "description": "Poetic evening journeys through the profound words of Gulzar and timeless voices.",
-        "badge": "AM 1080 • POETRY",
-        "tracks": [
-          {
-            "id": "_UEpGEXcMn4",
-            "title": "Tujhse Naraz Nahin Zindagi",
-            "artist": "Anup Ghoshal, Lata Mangeshkar",
-            "movie": "Masoom (1983)",
-            "duration": "5:41",
-            "thumb": "https://img.youtube.com/vi/_UEpGEXcMn4/hqdefault.jpg",
-            "tag": "Gulzar Masterpiece"
-          },
-          {
-            "id": "Zm4V6ty4K6k",
-            "title": "Tere Bina Zindagi Se Koi",
-            "artist": "Kishore Kumar, Lata Mangeshkar",
-            "movie": "Aandhi (1975)",
-            "duration": "5:52",
-            "thumb": "https://img.youtube.com/vi/Zm4V6ty4K6k/hqdefault.jpg",
-            "tag": "Soulful Ghazal"
-          },
-          {
-            "id": "MDXFi3avqo0",
-            "title": "Woh Shaam Kuchh Ajeeb Thi",
-            "artist": "Kishore Kumar",
-            "movie": "Khamoshi (1969)",
-            "duration": "4:46",
-            "thumb": "https://img.youtube.com/vi/MDXFi3avqo0/hqdefault.jpg",
-            "tag": "Poetic Solitude"
-          },
-          {
-            "id": "XUexH7Xk1yk",
-            "title": "Mera Kuchh Saamaan",
-            "artist": "Asha Bhosle",
-            "movie": "Ijaazat (1987)",
-            "duration": "6:05",
-            "thumb": "https://img.youtube.com/vi/XUexH7Xk1yk/hqdefault.jpg",
-            "tag": "National Award Winner"
-          },
-          {
-            "id": "3UsReAi_LIU",
-            "title": "Shaam Se Aankh Mein Nami Si Hai",
-            "artist": "Jagjit Singh, Gulzar",
-            "movie": "Marasim (1999)",
-            "duration": "5:22",
-            "thumb": "https://img.youtube.com/vi/3UsReAi_LIU/hqdefault.jpg",
-            "tag": "Acoustic Ghazal"
-          },
-          {
-            "id": "Q87TZLzRfwU",
-            "title": "Haath Chhoote Bhi Toh",
-            "artist": "Jagjit Singh, Gulzar",
-            "movie": "Marasim (1999)",
-            "duration": "5:18",
-            "thumb": "https://img.youtube.com/vi/Q87TZLzRfwU/hqdefault.jpg",
-            "tag": "Marasim Classic"
-          },
-          {
-            "id": "WKP5cqQvUBg",
-            "title": "Dil Dhoondta Hai Phir Wohi",
-            "artist": "Bhupinder Singh, Lata Mangeshkar",
-            "movie": "Mausam (1975)",
-            "duration": "4:15",
-            "thumb": "https://img.youtube.com/vi/WKP5cqQvUBg/hqdefault.jpg",
-            "tag": "Timeless Poetry"
-          },
-          {
-            "id": "uLi3WcON1CU",
-            "title": "Do Deewane Shahar Mein",
-            "artist": "Bhupinder Singh, Runa Laila",
-            "movie": "Ghar (1978)",
-            "duration": "4:50",
-            "thumb": "https://img.youtube.com/vi/uLi3WcON1CU/hqdefault.jpg",
-            "tag": "Monsoon Ghazal"
-          },
-          {
-            "id": "lySbCeZjVlw",
-            "title": "Naam Gum Jayega",
-            "artist": "Lata Mangeshkar, Bhupinder Singh",
-            "movie": "Kinara (1977)",
-            "duration": "5:25",
-            "thumb": "https://img.youtube.com/vi/lySbCeZjVlw/hqdefault.jpg",
-            "tag": "Everlasting Identity"
-          },
-          {
-            "id": "dmm5lM9BR8o",
-            "title": "Aap Ki Ankhon Mein Kuch",
-            "artist": "Kishore Kumar, Lata Mangeshkar",
-            "movie": "Ghar (1978)",
-            "duration": "4:10",
-            "thumb": "https://img.youtube.com/vi/dmm5lM9BR8o/hqdefault.jpg",
-            "tag": "Pure Romanticism"
-          },
-          {
-            "id": "Efx7BIzMEPI",
-            "title": "Is Mod Se Jaate Hain",
-            "artist": "Kishore Kumar, Lata Mangeshkar",
-            "movie": "Aandhi (1975)",
-            "duration": "4:55",
-            "thumb": "https://img.youtube.com/vi/Efx7BIzMEPI/hqdefault.jpg",
-            "tag": "Golden Nostalgia"
-          }
-        ]
-      },
-      {
-        "id": "manache-ghaav",
-        "name": "Manache Ghaav",
-        "description": "Soulful Marathi Bhavgeet and heartfelt melodies for quiet highway stretches.",
-        "badge": "FM 101.4 • BHAVGEET",
+        "id": "marathi-tadka",
+        "name": "Marathi Tadka",
+        "description": "High-octane Marathi Lokgeet, Halgi-Banjo auto anthems, Lavani, and chartbusting energy.",
+        "badge": "FM 98.3 • TADKA",
         "tracks": [
           {
             "id": "8eong8XHDB4",
@@ -2108,7 +2001,7 @@ window.playlistData = {
             "movie": "Sairat",
             "duration": "4:12",
             "thumb": "https://img.youtube.com/vi/8eong8XHDB4/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "0PKUIu3FMwQ",
@@ -2117,7 +2010,7 @@ window.playlistData = {
             "movie": "Sairat",
             "duration": "5:28",
             "thumb": "https://img.youtube.com/vi/0PKUIu3FMwQ/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "AQ-P5RR7r40",
@@ -2126,7 +2019,7 @@ window.playlistData = {
             "movie": "Sairat",
             "duration": "4:47",
             "thumb": "https://img.youtube.com/vi/AQ-P5RR7r40/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "Y4TICMyl9Eg",
@@ -2135,7 +2028,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:36",
             "thumb": "https://img.youtube.com/vi/Y4TICMyl9Eg/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "-wkoDlGv2y8",
@@ -2144,7 +2037,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:52",
             "thumb": "https://img.youtube.com/vi/-wkoDlGv2y8/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "mUDfIdT-2Ek",
@@ -2153,7 +2046,7 @@ window.playlistData = {
             "movie": "Natarang",
             "duration": "4:58",
             "thumb": "https://img.youtube.com/vi/mUDfIdT-2Ek/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "cbVq0L0iXyI",
@@ -2162,7 +2055,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:55",
             "thumb": "https://img.youtube.com/vi/cbVq0L0iXyI/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "A4snplP4_Wk",
@@ -2171,7 +2064,7 @@ window.playlistData = {
             "movie": "Duniyadari",
             "duration": "5:08",
             "thumb": "https://img.youtube.com/vi/A4snplP4_Wk/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "pLK9Zv4cNWE",
@@ -2180,7 +2073,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:49",
             "thumb": "https://img.youtube.com/vi/pLK9Zv4cNWE/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "-tlIESBoGlc",
@@ -2189,7 +2082,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:47",
             "thumb": "https://img.youtube.com/vi/-tlIESBoGlc/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "sJyCk2QuP6I",
@@ -2198,7 +2091,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:01",
             "thumb": "https://img.youtube.com/vi/sJyCk2QuP6I/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "JULTqp4jP64",
@@ -2207,16 +2100,8 @@ window.playlistData = {
             "movie": "Jogwa",
             "duration": "5:21",
             "thumb": "https://img.youtube.com/vi/JULTqp4jP64/hqdefault.jpg",
-            "tag": "Manache Ghaav Classic"
-          }
-        ]
-      },
-      {
-        "id": "dhaba-banger",
-        "name": "Highway Dhaba Beats",
-        "description": "High-octane roadside dhabas with Halgi, Banjo, and iconic Marathi auto anthems.",
-        "badge": "DHABA 98.3 • HALGI",
-        "tracks": [
+            "tag": "Marathi Tadka Hit"
+          },
           {
             "id": "v394f7XxOzQ",
             "title": "Vaat Majhi Baghtoy Rikshawala",
@@ -2224,7 +2109,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:23",
             "thumb": "https://img.youtube.com/vi/v394f7XxOzQ/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "ydG0sojfKQ0",
@@ -2233,7 +2118,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:18",
             "thumb": "https://img.youtube.com/vi/ydG0sojfKQ0/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "ezlBg6GFbao",
@@ -2242,7 +2127,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:35",
             "thumb": "https://img.youtube.com/vi/ezlBg6GFbao/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "g2EQJToNc7Y",
@@ -2251,7 +2136,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:01",
             "thumb": "https://img.youtube.com/vi/g2EQJToNc7Y/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "piORdqwIfwY",
@@ -2260,7 +2145,7 @@ window.playlistData = {
             "movie": "Jatra",
             "duration": "4:38",
             "thumb": "https://img.youtube.com/vi/piORdqwIfwY/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "yd2DwdqZsrY",
@@ -2269,7 +2154,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:14",
             "thumb": "https://img.youtube.com/vi/yd2DwdqZsrY/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "JlFiRkzysOo",
@@ -2278,7 +2163,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:50",
             "thumb": "https://img.youtube.com/vi/JlFiRkzysOo/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "YSm6DF4Pu_A",
@@ -2287,7 +2172,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:28",
             "thumb": "https://img.youtube.com/vi/YSm6DF4Pu_A/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "RJ9trb9hDNU",
@@ -2296,7 +2181,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:32",
             "thumb": "https://img.youtube.com/vi/RJ9trb9hDNU/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "03vKTb-ENNk",
@@ -2305,7 +2190,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:45",
             "thumb": "https://img.youtube.com/vi/03vKTb-ENNk/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "5TMAOGI1ZPI",
@@ -2314,7 +2199,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:42",
             "thumb": "https://img.youtube.com/vi/5TMAOGI1ZPI/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "9lQSvLb5gTc",
@@ -2323,7 +2208,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:25",
             "thumb": "https://img.youtube.com/vi/9lQSvLb5gTc/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "Ewwn5bPdxSQ",
@@ -2332,7 +2217,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:16",
             "thumb": "https://img.youtube.com/vi/Ewwn5bPdxSQ/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "6XJlCa50R3M",
@@ -2341,7 +2226,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:18",
             "thumb": "https://img.youtube.com/vi/6XJlCa50R3M/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "MSMaR6j_uFI",
@@ -2350,7 +2235,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:35",
             "thumb": "https://img.youtube.com/vi/MSMaR6j_uFI/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "yLpnrKFT5mI",
@@ -2359,7 +2244,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:28",
             "thumb": "https://img.youtube.com/vi/yLpnrKFT5mI/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "Zy-EMSZq1Lc",
@@ -2368,7 +2253,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:38",
             "thumb": "https://img.youtube.com/vi/Zy-EMSZq1Lc/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "T70pme6D9t8",
@@ -2377,7 +2262,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:14",
             "thumb": "https://img.youtube.com/vi/T70pme6D9t8/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "ET7JalQFxlM",
@@ -2386,7 +2271,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:50",
             "thumb": "https://img.youtube.com/vi/ET7JalQFxlM/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "kCg9ZMMsy9M",
@@ -2395,7 +2280,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:45",
             "thumb": "https://img.youtube.com/vi/kCg9ZMMsy9M/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "h9u7TnMz1io",
@@ -2404,7 +2289,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "5:12",
             "thumb": "https://img.youtube.com/vi/h9u7TnMz1io/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "UhQIuMZXBE4",
@@ -2413,7 +2298,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:28",
             "thumb": "https://img.youtube.com/vi/UhQIuMZXBE4/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "nssv0r1HDss",
@@ -2422,7 +2307,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:18",
             "thumb": "https://img.youtube.com/vi/nssv0r1HDss/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "FziGOXO0-x0",
@@ -2431,7 +2316,7 @@ window.playlistData = {
             "movie": "Marathi Lokgeet & Banjo",
             "duration": "4:39",
             "thumb": "https://img.youtube.com/vi/FziGOXO0-x0/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
+            "tag": "Marathi Tadka Hit"
           },
           {
             "id": "tF6m9cNH894",
@@ -2440,51 +2325,7 @@ window.playlistData = {
             "movie": "Jogwa",
             "duration": "4:58",
             "thumb": "https://img.youtube.com/vi/tF6m9cNH894/hqdefault.jpg",
-            "tag": "Highway Dhaba Banjo"
-          }
-        ]
-      },
-      {
-        "id": "ghats-rain",
-        "name": "Monsoon Highway & Rain",
-        "description": "Wipers in rhythm against the windshield as tires cut through misty mountain ghats.",
-        "badge": "MONSOON • AMBIENT",
-        "tracks": [
-          {
-            "id": "l9cR3CMyuzc",
-            "title": "Barso Re",
-            "artist": "Shreya Ghoshal, A.R. Rahman",
-            "movie": "Guru (2007)",
-            "duration": "5:29",
-            "thumb": "https://img.youtube.com/vi/l9cR3CMyuzc/hqdefault.jpg",
-            "tag": "Rain Anthem"
-          },
-          {
-            "id": "VMsn5-a45-s",
-            "title": "Tip Tip Barsa Paani",
-            "artist": "Udit Narayan, Alka Yagnik",
-            "movie": "Mohra (1994)",
-            "duration": "5:58",
-            "thumb": "https://img.youtube.com/vi/VMsn5-a45-s/hqdefault.jpg",
-            "tag": "Monsoon Classic"
-          },
-          {
-            "id": "AMuRRXCuy-4",
-            "title": "Pal Pal Dil Ke Paas",
-            "artist": "Kishore Kumar",
-            "movie": "Blackmail (1973)",
-            "duration": "5:28",
-            "thumb": "https://img.youtube.com/vi/AMuRRXCuy-4/hqdefault.jpg",
-            "tag": "Golden Retro"
-          },
-          {
-            "id": "mZwJs1YQ-Wk",
-            "title": "Kisi Din Banoongi Main",
-            "artist": "Alka Yagnik, Udit Narayan",
-            "movie": "Raja (1995)",
-            "duration": "7:02",
-            "thumb": "https://img.youtube.com/vi/mZwJs1YQ-Wk/hqdefault.jpg",
-            "tag": "Nostalgic Romance"
+            "tag": "Marathi Tadka Hit"
           }
         ]
       },
@@ -2943,6 +2784,50 @@ window.playlistData = {
             "duration": "4:50",
             "thumb": "https://img.youtube.com/vi/8NeQXMOpwrU/hqdefault.jpg",
             "tag": "Dehati Dholak & DJ Beat"
+          }
+        ]
+      },
+      {
+        "id": "ghats-rain",
+        "name": "Monsoon Highway & Rain",
+        "description": "Wipers in rhythm against the windshield as tires cut through misty mountain ghats.",
+        "badge": "MONSOON • AMBIENT",
+        "tracks": [
+          {
+            "id": "l9cR3CMyuzc",
+            "title": "Barso Re",
+            "artist": "Shreya Ghoshal, A.R. Rahman",
+            "movie": "Guru (2007)",
+            "duration": "5:29",
+            "thumb": "https://img.youtube.com/vi/l9cR3CMyuzc/hqdefault.jpg",
+            "tag": "Rain Anthem"
+          },
+          {
+            "id": "VMsn5-a45-s",
+            "title": "Tip Tip Barsa Paani",
+            "artist": "Udit Narayan, Alka Yagnik",
+            "movie": "Mohra (1994)",
+            "duration": "5:58",
+            "thumb": "https://img.youtube.com/vi/VMsn5-a45-s/hqdefault.jpg",
+            "tag": "Monsoon Classic"
+          },
+          {
+            "id": "AMuRRXCuy-4",
+            "title": "Pal Pal Dil Ke Paas",
+            "artist": "Kishore Kumar",
+            "movie": "Blackmail (1973)",
+            "duration": "5:28",
+            "thumb": "https://img.youtube.com/vi/AMuRRXCuy-4/hqdefault.jpg",
+            "tag": "Golden Retro"
+          },
+          {
+            "id": "mZwJs1YQ-Wk",
+            "title": "Kisi Din Banoongi Main",
+            "artist": "Alka Yagnik, Udit Narayan",
+            "movie": "Raja (1995)",
+            "duration": "7:02",
+            "thumb": "https://img.youtube.com/vi/mZwJs1YQ-Wk/hqdefault.jpg",
+            "tag": "Nostalgic Romance"
           }
         ]
       }

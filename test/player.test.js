@@ -70,10 +70,10 @@ describe('MusicPlayer Unit Tests (player.js)', () => {
   });
 
   test('setStation changes current station and resets track index', () => {
-    player.setStation('gulzar-ghazals');
-    assert.equal(player.currentStationId, 'gulzar-ghazals');
+    player.setStation('marathi-tadka');
+    assert.equal(player.currentStationId, 'marathi-tadka');
     assert.equal(player.currentTrackIndex, 0);
-    assert.equal(player.getActiveStation().name, 'Gulzar Ghazals');
+    assert.equal(player.getActiveStation().name, 'Marathi Tadka');
   });
 
   test('nextTrack and prevTrack navigate cyclically through current station', () => {
