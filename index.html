@@ -212,7 +212,18 @@
     </div>
 
     <!-- Main Universal Audio Deck Frame -->
-    <div class="audio-deck-frame w-full p-3.5 sm:p-4 flex flex-col gap-3">
+    <!-- Main Universal Audio Deck Frame Wrapper with Ambient Reactive Glow -->
+    <div id="audioDeckWrapper" class="audio-deck-wrapper w-full">
+      <div id="deckAmbientGlow" class="deck-ambient-glow" aria-hidden="true"></div>
+
+      <!-- Main Universal Audio Deck Frame -->
+      <div class="audio-deck-frame w-full p-3.5 sm:p-4 flex flex-col gap-3">
+
+        <!-- Physical Chassis Corner Hardware Screws -->
+        <div class="chassis-accent chassis-tl" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-tr" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-bl" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-br" aria-hidden="true"></div>
 
       <!-- Top Row: Cover, Track Info, Controls -->
       <div class="flex items-center gap-3 sm:gap-4">
@@ -229,7 +240,9 @@
             <span id="trackTag" class="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-amber-300 font-bold shrink-0">
               Midnight Vibe
             </span>
-            <div id="eqVisualizer" class="eq-container">
+            <div id="eqVisualizer" class="eq-container" aria-hidden="true">
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
               <div class="eq-bar"></div>
               <div class="eq-bar"></div>
               <div class="eq-bar"></div>
@@ -337,6 +350,7 @@
 
       </div>
 
+    </div>
     </div>
 
     <!-- Playback Shortcuts Ribbon Under the Audio Deck (Clean borderless inline shortcuts) -->

@@ -465,7 +465,18 @@ module.exports = server;
     </div>
 
     <!-- Main Universal Audio Deck Frame -->
-    <div class="audio-deck-frame w-full p-3.5 sm:p-4 flex flex-col gap-3">
+    <!-- Main Universal Audio Deck Frame Wrapper with Ambient Reactive Glow -->
+    <div id="audioDeckWrapper" class="audio-deck-wrapper w-full">
+      <div id="deckAmbientGlow" class="deck-ambient-glow" aria-hidden="true"></div>
+
+      <!-- Main Universal Audio Deck Frame -->
+      <div class="audio-deck-frame w-full p-3.5 sm:p-4 flex flex-col gap-3">
+
+        <!-- Physical Chassis Corner Hardware Screws -->
+        <div class="chassis-accent chassis-tl" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-tr" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-bl" aria-hidden="true"></div>
+        <div class="chassis-accent chassis-br" aria-hidden="true"></div>
 
       <!-- Top Row: Cover, Track Info, Controls -->
       <div class="flex items-center gap-3 sm:gap-4">
@@ -482,7 +493,9 @@ module.exports = server;
             <span id="trackTag" class="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-amber-300 font-bold shrink-0">
               Midnight Vibe
             </span>
-            <div id="eqVisualizer" class="eq-container">
+            <div id="eqVisualizer" class="eq-container" aria-hidden="true">
+              <div class="eq-bar"></div>
+              <div class="eq-bar"></div>
               <div class="eq-bar"></div>
               <div class="eq-bar"></div>
               <div class="eq-bar"></div>
@@ -590,6 +603,7 @@ module.exports = server;
 
       </div>
 
+    </div>
     </div>
 
     <!-- Playback Shortcuts Ribbon Under the Audio Deck (Clean borderless inline shortcuts) -->
@@ -885,7 +899,7 @@ module.exports = server;
 /* ============================================================================== */
 
 ```css:css/styles.css
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap');
 
 @font-face {
   font-family: 'Big Shoulders Display';
@@ -914,34 +928,50 @@ module.exports = server;
   text-transform: uppercase;
 }
 
+/* ============================================================
+ * LUXURY DESIGN SYSTEM TOKENS & DUAL-THEME VARIABLES
+ * ============================================================ */
+
 :root {
-  /* Default: Highway Cabin Theme */
-  --bg-core: #090d16;
-  --bg-card: rgba(15, 23, 42, 0.72);
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-card-hover: rgba(245, 158, 11, 0.35);
+  /* Bus Driver: Midnight Interstate Obsidian & Sunset Gold */
+  --bg-core: #070a12;
+  --bg-card: rgba(13, 19, 33, 0.78);
+  --bg-card-subtle: rgba(18, 26, 46, 0.65);
+  --border-card: rgba(255, 255, 255, 0.12);
+  --border-card-hover: rgba(245, 158, 11, 0.45);
+  --border-specular: rgba(255, 255, 255, 0.22);
   --accent-primary: #f59e0b;
   --accent-secondary: #d97706;
-  --accent-glow: rgba(245, 158, 11, 0.25);
-  --accent-contrast: #0f172a;
+  --accent-glow: rgba(245, 158, 11, 0.35);
+  --accent-contrast: #070a12;
   --text-primary: #f8fafc;
   --text-muted: #94a3b8;
+  --text-dim: #64748b;
   --led-bar: #10b981;
+  --led-peak: #f59e0b;
+  --deck-shadow: 0 24px 70px rgba(0, 0, 0, 0.85);
+  --glow-ambient: rgba(245, 158, 11, 0.18);
 }
 
-/* Deluxe Saloon Theme Overrides */
+/* Deluxe Saloon: Vintage Mahogany, Brass & Imperial Jade */
 body.theme-saloon {
-  --bg-core: #0c0a09;
-  --bg-card: rgba(28, 25, 23, 0.76);
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-card-hover: rgba(20, 184, 166, 0.35);
+  --bg-core: #0c0908;
+  --bg-card: rgba(24, 18, 15, 0.82);
+  --bg-card-subtle: rgba(36, 26, 22, 0.68);
+  --border-card: rgba(255, 255, 255, 0.12);
+  --border-card-hover: rgba(20, 184, 166, 0.45);
+  --border-specular: rgba(255, 255, 255, 0.20);
   --accent-primary: #14b8a6;
   --accent-secondary: #0d9488;
-  --accent-glow: rgba(20, 184, 166, 0.25);
-  --accent-contrast: #042f2e;
+  --accent-glow: rgba(20, 184, 166, 0.35);
+  --accent-contrast: #03201f;
   --text-primary: #fafaf9;
   --text-muted: #a8a29e;
+  --text-dim: #78716c;
   --led-bar: #f59e0b;
+  --led-peak: #14b8a6;
+  --deck-shadow: 0 24px 70px rgba(0, 0, 0, 0.90);
+  --glow-ambient: rgba(20, 184, 166, 0.18);
 }
 
 * {
@@ -958,7 +988,7 @@ body {
   font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
   user-select: none;
-  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .font-mono {
@@ -966,106 +996,129 @@ body {
 }
 
 .font-display {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Syne', sans-serif;
 }
 
 /* Custom minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.20);
   border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
 /* ============================================================
- * BRAND IDENTITY BADGE
+ * BRAND IDENTITY BADGE (LUXURY RETRO EMBLEM)
  * ============================================================ */
 
 .brand-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 14px 6px 8px;
+  gap: 12px;
+  padding: 7px 18px 7px 8px;
   border-radius: 9999px;
-  background: rgba(9, 13, 22, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-  transition: all 0.25s ease;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(9, 13, 22, 0.92));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
 }
 
+.brand-badge:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65), 0 0 18px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
 body.theme-saloon .brand-badge {
-  background: rgba(24, 15, 10, 0.82);
-  border-color: rgba(245, 158, 11, 0.25);
+  background: linear-gradient(135deg, rgba(34, 23, 18, 0.90), rgba(18, 12, 10, 0.94));
+  border-color: rgba(245, 158, 11, 0.28);
 }
 
 .brand-icon-box {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #fbbf24, #d97706);
-  color: #0f172a;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 70%, #92400e 100%);
+  color: #090d16;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.50), inset 0 1px 1px rgba(255, 255, 255, 0.4);
   flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.brand-badge:hover .brand-icon-box {
+  transform: scale(1.08) rotate(4deg);
 }
 
 body.theme-saloon .brand-icon-box {
-  background: linear-gradient(135deg, #2dd4bf, #0d9488);
-  box-shadow: 0 2px 10px rgba(20, 184, 166, 0.4);
+  background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 70%, #115e59 100%);
+  box-shadow: 0 3px 12px rgba(20, 184, 166, 0.50), inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 /* ============================================================
- * MODE SWITCHER COMPONENT
+ * MASTER DUAL-MODE SWITCHER (PRECISION KNURLED METALLIC TOGGLE)
  * ============================================================ */
 
 .mode-switch-wrapper {
   position: relative;
   display: inline-flex;
-  padding: 3px;
+  padding: 4px;
   border-radius: 9999px;
-  background: rgba(0, 0, 0, 0.70);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  min-width: 240px;
+  background: linear-gradient(180deg, rgba(8, 12, 22, 0.92) 0%, rgba(3, 6, 12, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(0, 0, 0, 0.8), inset 0 -1px 1px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  min-width: 250px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mode-switch-wrapper:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+body.theme-saloon .mode-switch-wrapper {
+  background: linear-gradient(180deg, rgba(20, 14, 10, 0.94) 0%, rgba(8, 5, 4, 0.98) 100%);
+  border-color: rgba(245, 158, 11, 0.28);
 }
 
 .mode-switch-slider {
   position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: 3px;
-  width: calc(50% - 3px);
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
   border-radius: 9999px;
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.28s ease;
+  transition: transform 0.32s cubic-bezier(0.34, 1.25, 0.64, 1), background-color 0.3s ease, box-shadow 0.3s ease;
   pointer-events: none;
   z-index: 1;
 }
 
 body:not(.theme-saloon) .mode-switch-slider {
   transform: translateX(0%);
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 70%, #b45309 100%);
+  box-shadow: 0 3px 15px rgba(245, 158, 11, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 
 body.theme-saloon .mode-switch-slider {
   transform: translateX(100%);
-  background: linear-gradient(135deg, #14b8a6, #0d9488);
-  box-shadow: 0 2px 10px rgba(20, 184, 166, 0.35);
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 70%, #0f766e 100%);
+  box-shadow: 0 3px 15px rgba(20, 184, 166, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 
 .mode-btn {
@@ -1075,31 +1128,25 @@ body.theme-saloon .mode-switch-slider {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 8px 18px;
   border-radius: 9999px;
   border: none;
   outline: none !important;
   background: transparent;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.60);
   font-weight: 600;
-  font-size: 12.5px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.15s ease;
   white-space: nowrap;
   user-select: none;
   -webkit-user-select: none;
-  box-shadow: none !important;
 }
 
-.mode-btn:focus,
-.mode-btn:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.mode-switch-wrapper:focus-within {
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25), 0 4px 20px rgba(0, 0, 0, 0.4);
+.mode-btn:active {
+  transform: scale(0.96);
 }
 
 .mode-btn:hover {
@@ -1107,51 +1154,102 @@ body.theme-saloon .mode-switch-slider {
 }
 
 body:not(.theme-saloon) .mode-btn.driver-active {
-  color: #0f172a;
-  font-weight: 700;
+  color: #070a12;
+  font-weight: 800;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 body.theme-saloon .mode-btn.saloon-active {
-  color: #042f2e;
-  font-weight: 700;
+  color: #03201f;
+  font-weight: 800;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 /* ============================================================
- * AUDIO DECK & CASSETTE CONTROLS
+ * UNIVERSAL HI-FI AUDIO CHASSIS DECK
  * ============================================================ */
 
+.audio-deck-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.deck-ambient-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 28px;
+  background: radial-gradient(ellipse at center, var(--glow-ambient) 0%, transparent 72%);
+  opacity: 0.35;
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.5s ease, background 0.5s ease;
+}
+
+.is-playing .deck-ambient-glow {
+  opacity: 0.75;
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% { transform: scale(0.98); opacity: 0.55; }
+  100% { transform: scale(1.02); opacity: 0.85; }
+}
+
 .audio-deck-frame {
-  background: var(--bg-card);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(165deg, var(--bg-card) 0%, rgba(9, 13, 22, 0.90) 100%);
   border: 1px solid var(--border-card);
-  border-radius: 20px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 22px;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: var(--deck-shadow), inset 0 1px 0 var(--border-specular), inset 0 -1px 0 rgba(0, 0, 0, 0.7);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .audio-deck-frame:hover {
   border-color: var(--border-card-hover);
 }
 
-/* Spinning Disc Vinyl / Cassette Art */
+/* Decorative Chassis Rivets / Screws */
+.chassis-accent {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e2e8f0 30%, #475569 80%);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 0.5px 0.5px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 3;
+}
+.chassis-tl { top: 9px; left: 11px; }
+.chassis-tr { top: 9px; right: 11px; }
+.chassis-bl { bottom: 9px; left: 11px; }
+.chassis-br { bottom: 9px; right: 11px; }
+
+/* Spinning Vinyl / Cassette Spool */
 .cassette-disc {
   position: relative;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: radial-gradient(circle, #27272a 20%, #09090b 65%, #18181b 100%);
-  border: 2px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background: radial-gradient(circle, #27272a 15%, #09090b 60%, #18181b 95%, #27272a 100%);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65), 0 0 12px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.34, 1.25, 0.64, 1), border-color 0.25s ease;
 }
 
 .cassette-disc:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
   border-color: var(--accent-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 16px var(--accent-glow);
 }
 
 .cassette-disc.spinning .disc-artwork {
@@ -1169,163 +1267,76 @@ body.theme-saloon .mode-btn.saloon-active {
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  position: relative;
+}
+
+/* Vinyl Sheen Overlay */
+.disc-artwork::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.18) 0deg,
+    transparent 60deg,
+    rgba(255, 255, 255, 0.14) 120deg,
+    transparent 180deg,
+    rgba(255, 255, 255, 0.18) 240deg,
+    transparent 300deg,
+    rgba(255, 255, 255, 0.14) 360deg
+  );
+  pointer-events: none;
 }
 
 .disc-center-hole {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  background: #09090b;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  background: radial-gradient(circle, #000000 40%, #1f2937 100%);
+  border: 2px solid rgba(255, 255, 255, 0.65);
   border-radius: 50%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
 
-/* LED Equalizer Bars */
+/* High-Visibility LED Spectrum Equalizer */
 .eq-container {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
-  height: 14px;
+  gap: 2.5px;
+  height: 15px;
+  padding: 0 3px;
 }
 
 .eq-bar {
-  width: 3px;
-  background-color: var(--led-bar);
-  border-radius: 1px;
-  transition: height 0.12s ease;
+  width: 3.5px;
+  background: linear-gradient(to top, var(--led-bar) 0%, var(--led-bar) 70%, var(--led-peak) 100%);
+  border-radius: 1.5px;
+  transition: height 0.14s ease;
   height: 3px;
+  box-shadow: 0 0 6px var(--accent-glow);
 }
 
-.is-playing .eq-bar:nth-child(1) { animation: eqJump 0.5s ease-in-out infinite alternate; }
-.is-playing .eq-bar:nth-child(2) { animation: eqJump 0.7s ease-in-out 0.1s infinite alternate; }
-.is-playing .eq-bar:nth-child(3) { animation: eqJump 0.4s ease-in-out 0.2s infinite alternate; }
-.is-playing .eq-bar:nth-child(4) { animation: eqJump 0.8s ease-in-out 0.15s infinite alternate; }
-.is-playing .eq-bar:nth-child(5) { animation: eqJump 0.6s ease-in-out 0.05s infinite alternate; }
+.is-playing .eq-bar:nth-child(1) { animation: eqJump 0.45s ease-in-out infinite alternate; }
+.is-playing .eq-bar:nth-child(2) { animation: eqJump 0.68s ease-in-out 0.10s infinite alternate; }
+.is-playing .eq-bar:nth-child(3) { animation: eqJump 0.38s ease-in-out 0.22s infinite alternate; }
+.is-playing .eq-bar:nth-child(4) { animation: eqJump 0.78s ease-in-out 0.14s infinite alternate; }
+.is-playing .eq-bar:nth-child(5) { animation: eqJump 0.55s ease-in-out 0.04s infinite alternate; }
+.is-playing .eq-bar:nth-child(6) { animation: eqJump 0.62s ease-in-out 0.18s infinite alternate; }
+.is-playing .eq-bar:nth-child(7) { animation: eqJump 0.42s ease-in-out 0.08s infinite alternate; }
 
 @keyframes eqJump {
   0% { height: 3px; }
-  50% { height: 13px; }
-  100% { height: 6px; }
+  50% { height: 14px; }
+  100% { height: 7px; }
 }
 
 /* ============================================================
- * INTERACTIVE BUTTONS & CONTROLS
- * ============================================================ */
-
-.tactile-action-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(18, 24, 38, 0.6);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 12.5px;
-  font-weight: 600;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tactile-action-btn:hover {
-  transform: translateY(-1px);
-  background: rgba(30, 41, 59, 0.85);
-  border-color: var(--accent-primary);
-  color: #ffffff;
-  box-shadow: 0 6px 18px var(--accent-glow);
-}
-
-.tactile-action-btn:active {
-  transform: translateY(1px);
-}
-
-.tactile-action-btn.active {
-  background: rgba(245, 158, 11, 0.18);
-  border-color: var(--accent-primary);
-  color: #ffffff;
-}
-
-body.theme-saloon .tactile-action-btn.active {
-  background: rgba(20, 184, 166, 0.18);
-}
-
-/* Primary Highlight Action Button */
-.horn-giant-btn {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  border-color: rgba(248, 113, 113, 0.4);
-  color: #ffffff;
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
-}
-
-.horn-giant-btn:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.6);
-}
-
-/* ============================================================
- * PROGRESS & SEEK SLIDER
- * ============================================================ */
-
-.progress-track {
-  position: relative;
-  width: 100%;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  cursor: pointer;
-  overflow: hidden;
-  transition: height 0.15s ease;
-}
-
-.progress-track:hover {
-  height: 7px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--accent-primary);
-  width: 0%;
-  border-radius: 999px;
-  transition: width 0.1s linear, background-color 0.3s ease;
-  box-shadow: 0 0 10px var(--accent-glow);
-}
-
-/* Volume Slider */
-input[type="range"] {
-  -webkit-appearance: none;
-  background: rgba(255, 255, 255, 0.18);
-  height: 4px;
-  border-radius: 999px;
-  outline: none;
-  cursor: pointer;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.25);
-  background: var(--accent-primary);
-}
-
-/* ============================================================
- * HERO TITLE COMPACT POSITIONING (PREVENTS COVERING CANVAS ART)
+ * HERO TITLE & AMBIENT ATMOSPHERE
  * ============================================================ */
 
 .hero-title-headline {
@@ -1334,31 +1345,27 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 0 !important;
   font-family: 'Big Shoulders Display', 'Big Shoulders', 'Big Shoulders Text', 'Impact', sans-serif !important;
   font-weight: 900 !important;
-  font-size: clamp(5.2rem, 13.5vw, 11.2rem) !important;
+  font-size: clamp(5.4rem, 14vw, 11.5rem) !important;
   line-height: 0.80 !important;
-  letter-spacing: 0.045em !important;
+  letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   color: #ffffff !important;
-  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.98), 0 12px 48px rgba(0, 0, 0, 0.95), 0 0 50px rgba(245, 158, 11, 0.45) !important;
+  text-shadow: 0 6px 28px rgba(0, 0, 0, 0.98), 0 14px 50px rgba(0, 0, 0, 0.95), 0 0 60px rgba(245, 158, 11, 0.40) !important;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
-  transition: color 0.3s ease, text-shadow 0.3s ease, font-size 0.25s ease;
+  transition: color 0.4s ease, text-shadow 0.4s ease, font-size 0.25s ease;
 }
 
 body.theme-saloon .hero-title-headline {
-  font-size: clamp(4.6rem, 11.8vw, 9.8rem) !important;
-  letter-spacing: 0.05em !important;
+  font-size: clamp(4.6rem, 12vw, 10rem) !important;
+  letter-spacing: 0.055em !important;
   color: #fef3c7 !important;
-  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.98), 0 12px 48px rgba(0, 0, 0, 0.95), 0 0 50px rgba(245, 158, 11, 0.45), 0 0 20px rgba(20, 184, 166, 0.35) !important;
+  text-shadow: 0 6px 28px rgba(0, 0, 0, 0.98), 0 14px 50px rgba(0, 0, 0, 0.95), 0 0 60px rgba(20, 184, 166, 0.40) !important;
 }
 
 /* ============================================================
- * STATION PILLS (SOLID HIGH-CONTRAST VISIBILITY OVER ROAD & HEADLIGHTS)
- * ============================================================ */
-
-/* ============================================================
- * STATIONS DOCK & PILLS (SMOOTH SLIDING, DRAG & ARROWS)
+ * STATIONS DOCK & PRESET SELECTOR (LUXURY HI-FI RECEIVER)
  * ============================================================ */
 
 .stations-dock-wrapper {
@@ -1369,29 +1376,34 @@ body.theme-saloon .hero-title-headline {
   max-width: 100%;
   margin: 0 auto;
   border-radius: 9999px;
-  background: rgba(8, 12, 22, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(180deg, rgba(13, 19, 33, 0.92) 0%, rgba(6, 10, 18, 0.96) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.70);
-  padding: 4px 6px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  padding: 5px 7px;
   overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stations-dock-wrapper:hover {
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 body.theme-saloon .stations-dock-wrapper {
-  background: rgba(18, 12, 8, 0.94);
-  border-color: rgba(245, 158, 11, 0.32);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.80);
+  background: linear-gradient(180deg, rgba(26, 18, 14, 0.94) 0%, rgba(12, 8, 6, 0.98) 100%);
+  border-color: rgba(245, 158, 11, 0.30);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(245, 158, 11, 0.15);
 }
 
-/* Subtle edge fade overlays showing there is more content to reveal */
+/* Subtle edge fade overlays showing scrollable content */
 .stations-dock-wrapper::before,
 .stations-dock-wrapper::after {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 28px;
+  width: 32px;
   pointer-events: none;
   z-index: 5;
   opacity: 0;
@@ -1399,13 +1411,13 @@ body.theme-saloon .stations-dock-wrapper {
 }
 
 .stations-dock-wrapper::before {
-  left: 38px;
-  background: linear-gradient(to right, rgba(8, 12, 22, 0.95), transparent);
+  left: 40px;
+  background: linear-gradient(to right, rgba(8, 12, 22, 0.98), transparent);
 }
 
 .stations-dock-wrapper::after {
-  right: 38px;
-  background: linear-gradient(to left, rgba(8, 12, 22, 0.95), transparent);
+  right: 40px;
+  background: linear-gradient(to left, rgba(8, 12, 22, 0.98), transparent);
 }
 
 body.theme-saloon .stations-dock-wrapper::before {
@@ -1427,8 +1439,8 @@ body.theme-saloon .stations-dock-wrapper::after {
 /* Slide Navigation Arrow Buttons */
 .dock-slide-arrow {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -1437,25 +1449,25 @@ body.theme-saloon .stations-dock-wrapper::after {
   color: #f1f5f9;
   border: 1px solid rgba(255, 255, 255, 0.18);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
   padding: 0;
   outline: none;
 }
 
 .dock-slide-arrow:hover:not(.is-disabled) {
-  background: rgba(245, 158, 11, 0.28);
-  border-color: rgba(245, 158, 11, 0.70);
+  background: rgba(245, 158, 11, 0.32);
+  border-color: rgba(245, 158, 11, 0.75);
   color: #fef08a;
-  transform: scale(1.10);
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.50);
+  transform: scale(1.12);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.55);
 }
 
 body.theme-saloon .dock-slide-arrow:hover:not(.is-disabled) {
-  background: rgba(20, 184, 166, 0.28);
-  border-color: rgba(20, 184, 166, 0.70);
+  background: rgba(20, 184, 166, 0.32);
+  border-color: rgba(20, 184, 166, 0.75);
   color: #99f6e4;
-  box-shadow: 0 0 14px rgba(20, 184, 166, 0.50);
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.55);
 }
 
 .dock-slide-arrow:active:not(.is-disabled) {
@@ -1463,14 +1475,14 @@ body.theme-saloon .dock-slide-arrow:hover:not(.is-disabled) {
 }
 
 .dock-slide-arrow.is-disabled {
-  opacity: 0.20;
+  opacity: 0.18;
   cursor: default;
   pointer-events: none;
   transform: none !important;
   box-shadow: none !important;
 }
 
-/* Horizontal Scroll Container with Grab-and-Drag */
+/* Horizontal Scroll Container */
 .stations-dock-scroll {
   flex: 1 1 auto;
   display: flex;
@@ -1502,103 +1514,332 @@ body.theme-saloon .stations-dock-scroll {
 .stations-dock-scroll::-webkit-scrollbar {
   height: 3px;
 }
-
 .stations-dock-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .stations-dock-scroll::-webkit-scrollbar-thumb {
   background: rgba(245, 158, 11, 0.40);
   border-radius: 9999px;
 }
-
 body.theme-saloon .stations-dock-scroll::-webkit-scrollbar-thumb {
   background: rgba(20, 184, 166, 0.40);
 }
 
+/* Individual Station Pill */
 .station-pill {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 15px;
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  font-size: 12.5px;
+  background: rgba(15, 23, 42, 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  font-size: 13px;
   font-weight: 600;
   color: #f8fafc;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   user-select: none;
   -webkit-user-select: none;
 }
 
 .station-pill:hover {
-  background: rgba(24, 34, 58, 0.98);
+  background: rgba(26, 38, 64, 0.98);
   border-color: rgba(255, 255, 255, 0.45);
   color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.15);
+}
+
+.station-pill:active {
+  transform: translateY(0.5px) scale(0.98);
 }
 
 .station-pill.active {
-  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-  color: #090d16 !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 80%, #b45309 100%) !important;
+  color: #070a12 !important;
   font-weight: 800 !important;
-  border-color: #f59e0b !important;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.65) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.75), 0 4px 16px rgba(0, 0, 0, 0.6) !important;
   text-shadow: none !important;
 }
 
 body.theme-saloon .station-pill {
-  background: rgba(24, 16, 12, 0.94);
-  border-color: rgba(245, 158, 11, 0.28);
+  background: rgba(26, 18, 14, 0.94);
+  border-color: rgba(245, 158, 11, 0.26);
   color: #fef3c7;
 }
 
 body.theme-saloon .station-pill:hover {
-  background: rgba(38, 24, 18, 0.98);
+  background: rgba(42, 28, 20, 0.98);
   border-color: rgba(245, 158, 11, 0.55);
   color: #ffffff;
 }
 
 body.theme-saloon .station-pill.active {
-  background: linear-gradient(135deg, #14b8a6, #0d9488) !important;
-  color: #042f2e !important;
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 80%, #0f766e 100%) !important;
+  color: #03201f !important;
   font-weight: 800 !important;
-  border-color: #14b8a6 !important;
-  box-shadow: 0 0 20px rgba(20, 184, 166, 0.65) !important;
+  border-color: #2dd4bf !important;
+  box-shadow: 0 0 25px rgba(20, 184, 166, 0.75), 0 4px 16px rgba(0, 0, 0, 0.6) !important;
   text-shadow: none !important;
 }
 
-.sleep-pill.active, .time-pill.active {
-  background: var(--accent-primary) !important;
-  color: #0f172a !important;
-  font-weight: 700 !important;
-  border-color: var(--accent-primary) !important;
-  box-shadow: 0 0 14px var(--accent-glow) !important;
+/* Frequency badge inside station pill */
+.station-pill-freq {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1.5px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+
+.station-pill.active .station-pill-freq {
+  background: rgba(0, 0, 0, 0.22);
+  color: currentColor;
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 /* ============================================================
- * MODALS & DRAWERS
+ * INTERACTIVE ACTION CONTROLS & SOUNDBOARDS
+ * ============================================================ */
+
+.tactile-action-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(18, 26, 44, 0.75) 0%, rgba(9, 13, 22, 0.85) 100%);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tactile-action-btn:hover {
+  transform: translateY(-1.5px);
+  background: linear-gradient(180deg, rgba(30, 44, 72, 0.88) 0%, rgba(14, 20, 36, 0.95) 100%);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 14px var(--accent-glow);
+}
+
+.tactile-action-btn:active {
+  transform: translateY(0.5px) scale(0.97);
+}
+
+.tactile-action-btn.active {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.35) 100%);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+
+body.theme-saloon .tactile-action-btn.active {
+  background: linear-gradient(180deg, rgba(20, 184, 166, 0.25) 0%, rgba(13, 148, 136, 0.35) 100%);
+  border-color: var(--accent-primary);
+}
+
+/* HIGHWAY PRESSURE AIR HORN TRIGGER BUTTON */
+.horn-giant-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 60%, #991b1b 100%) !important;
+  border-color: rgba(254, 202, 202, 0.40) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.4px !important;
+  box-shadow: 0 6px 22px rgba(220, 38, 38, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.horn-giant-btn:hover {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 60%, #b91c1c 100%) !important;
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.75), 0 0 20px rgba(239, 68, 68, 0.50) !important;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.horn-giant-btn:active {
+  transform: translateY(1px) scale(0.96) !important;
+}
+
+/* ============================================================
+ * PLAYER BUTTONS (SPUN METAL HERO PLAY/PAUSE)
+ * ============================================================ */
+
+#playBtn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fde68a 0%, #f59e0b 50%, #b45309 100%);
+  color: #070a12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.55), 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+#playBtn:hover {
+  transform: scale(1.10);
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.75), 0 0 22px rgba(245, 158, 11, 0.50);
+}
+
+#playBtn:active {
+  transform: scale(0.94);
+}
+
+body.theme-saloon #playBtn {
+  background: radial-gradient(circle at 35% 35%, #99f6e4 0%, #14b8a6 50%, #0f766e 100%);
+  color: #03201f;
+  box-shadow: 0 6px 22px rgba(20, 184, 166, 0.55), 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.65);
+}
+
+body.theme-saloon #playBtn:hover {
+  box-shadow: 0 8px 28px rgba(20, 184, 166, 0.75), 0 0 22px rgba(20, 184, 166, 0.50);
+}
+
+/* Secondary Circular Audio Buttons */
+#prevBtn, #nextBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#prevBtn:hover, #nextBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  transform: scale(1.10);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+#prevBtn:active, #nextBtn:active {
+  transform: scale(0.92);
+}
+
+/* ============================================================
+ * PROGRESS & FREQUENCY TUNER SLIDER
+ * ============================================================ */
+
+.progress-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  cursor: pointer;
+  overflow: visible;
+  transition: height 0.15s ease, background-color 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.progress-track:hover {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.progress-fill {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Scrubber Head Thumb */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px var(--accent-primary), 0 2px 6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease;
+}
+
+.progress-track:hover .progress-fill::after {
+  transform: translateY(-50%) scale(1);
+}
+
+/* Volume Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.18);
+  height: 4px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.30);
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ============================================================
+ * MODALS & DRAWERS (LUXURY FROSTED GLASS CARDS)
  * ============================================================ */
 
 .drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 50;
   display: none;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.28s ease;
 }
 
 .drawer-overlay.open {
@@ -1608,24 +1849,23 @@ body.theme-saloon .station-pill.active {
 
 .drawer-card {
   position: relative;
-  background: #0f172a;
-  background: radial-gradient(circle at top, #1e293b 0%, #090d16 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+  background: linear-gradient(165deg, #131c30 0%, #090d16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.90), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   max-height: 85vh;
   width: 100%;
-  max-width: 620px;
+  max-width: 640px;
   margin: auto;
-  padding: 24px;
+  padding: 26px;
   overflow-y: auto;
-  transform: translateY(16px) scale(0.97);
-  transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.28s cubic-bezier(0.34, 1.25, 0.64, 1);
 }
 
 body.theme-saloon .drawer-card {
-  background: radial-gradient(circle at top, #281912 0%, #0e0a08 100%);
-  border-color: rgba(245, 158, 11, 0.2);
+  background: linear-gradient(165deg, #2c1b14 0%, #0e0a08 100%);
+  border-color: rgba(245, 158, 11, 0.24);
 }
 
 .drawer-overlay.open .drawer-card {
@@ -1638,13 +1878,81 @@ body.theme-saloon .drawer-card {
   filter: drop-shadow(0 0 8px var(--accent-glow));
 }
 
-/* Professional Travel Boarding Pass & Salon Receipt Styling */
+/* Quick Pills for Sleep Timer & Time-of-Day */
+.sleep-pill, .time-pill {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sleep-pill:hover, .time-pill:hover {
+  border-color: var(--accent-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.sleep-pill.active, .time-pill.active {
+  background: var(--accent-primary) !important;
+  color: #070a12 !important;
+  font-weight: 800 !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 16px var(--accent-glow) !important;
+}
+
+/* ============================================================
+ * TOAST NOTIFICATION: PERFECT 50% SCREEN CENTER
+ * ============================================================ */
+
+.toast-floating-container {
+  position: fixed;
+  top: 92px;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(-10px);
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.28s cubic-bezier(0.34, 1.25, 0.64, 1), transform 0.28s cubic-bezier(0.34, 1.25, 0.64, 1);
+}
+
+.toast-floating-container.show {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.toast-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 24px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #070a12;
+  font-weight: 800;
+  font-size: 13.5px;
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.70), 0 0 30px rgba(245, 158, 11, 0.50);
+  letter-spacing: 0.35px;
+  text-shadow: none;
+}
+
+body.theme-saloon .toast-badge {
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  color: #03201f;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.70), 0 0 30px rgba(20, 184, 166, 0.50);
+}
+
+/* ============================================================
+ * SOUVENIR TICKET & SALON RECEIPT
+ * ============================================================ */
+
 .ticket-paper {
   background: #ffffff;
   color: #0f172a;
-  border-radius: 16px;
+  border-radius: 18px;
   position: relative;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.70);
   border: 1px solid #e2e8f0;
   overflow: hidden;
 }
@@ -1657,34 +1965,33 @@ body.theme-saloon .ticket-paper {
 .ticket-notch-left, .ticket-notch-right {
   position: absolute;
   top: 60%;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #090d16;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #070a12;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   z-index: 5;
 }
 
 body.theme-saloon .ticket-notch-left, body.theme-saloon .ticket-notch-right {
-  background: #0e0a08;
-  border-color: rgba(245, 158, 11, 0.15);
+  background: #0c0908;
+  border-color: rgba(245, 158, 11, 0.18);
 }
 
-.ticket-notch-left { left: -9px; margin-top: -9px; }
-.ticket-notch-right { right: -9px; margin-top: -9px; }
+.ticket-notch-left { left: -10px; margin-top: -10px; }
+.ticket-notch-right { right: -10px; margin-top: -10px; }
 
-/* Barcode Simulation Lines */
+/* Barcode simulation */
 .barcode-bar {
   display: inline-block;
-  height: 28px;
+  height: 30px;
   background-color: #0f172a;
 }
 
 /* ============================================================
- * ACCESSIBILITY & UTILITY ADDITIONS
+ * ACCESSIBILITY & PRINT UTILITIES
  * ============================================================ */
 
-/* Hide scrollbars while allowing touch/mouse drag scroll */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -1693,13 +2000,11 @@ body.theme-saloon .ticket-notch-left, body.theme-saloon .ticket-notch-right {
   scrollbar-width: none;
 }
 
-/* Visible high-contrast focus ring for keyboard navigation */
 :focus-visible {
   outline: 2px solid var(--accent-primary) !important;
-  outline-offset: 2px !important;
+  outline-offset: 3px !important;
 }
 
-/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -1709,7 +2014,6 @@ body.theme-saloon .ticket-notch-left, body.theme-saloon .ticket-notch-right {
   }
 }
 
-/* Print Styles for Souvenir Card */
 @media print {
   body * {
     visibility: hidden;
@@ -1736,52 +2040,6 @@ body.theme-saloon .ticket-notch-left, body.theme-saloon .ticket-notch-right {
   #ticketModal button {
     display: none !important;
   }
-}
-
-/* ============================================================
- * TOAST NOTIFICATION: PERFECT 50% CENTER ALIGNMENT & DYNAMIC THEMES
- * ============================================================ */
-
-.toast-floating-container {
-  position: fixed;
-  top: 88px;
-  left: 50% !important;
-  transform: translateX(-50%) translateY(-8px);
-  z-index: 50;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.toast-floating-container.show {
-  opacity: 1 !important;
-  transform: translateX(-50%) translateY(0) !important;
-}
-
-.toast-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 22px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #090d16;
-  font-weight: 800;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 25px rgba(245, 158, 11, 0.45);
-  letter-spacing: 0.3px;
-  text-shadow: none;
-}
-
-body.theme-saloon .toast-badge {
-  background: linear-gradient(135deg, #14b8a6, #0d9488);
-  color: #042f2e;
-  border-color: rgba(255, 255, 255, 0.40);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 25px rgba(20, 184, 166, 0.45);
 }
 
 ```
@@ -7661,6 +7919,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const cassetteDisc = document.getElementById('cassetteDisc');
   const discArtwork = document.getElementById('discArtwork');
   const eqVisualizer = document.getElementById('eqVisualizer');
+  const audioDeckWrapper = document.getElementById('audioDeckWrapper');
+  const deckAmbientGlow = document.getElementById('deckAmbientGlow');
 
   // Progress & Time
   const progressTrack = document.getElementById('progressTrack');
@@ -7789,12 +8049,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = `station-pill ${station.id === activeStation.id ? 'active' : ''}`;
+      const isActive = station.id === activeStation.id;
+      const freqTag = station.badge ? station.badge.split('•')[0].trim() : 'FM';
       btn.innerHTML = `
-        <svg class="w-3.5 h-3.5 shrink-0 opacity-75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="2"></circle>
-          <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
-        </svg>
-        <span>${station.name}</span>
+        <span class="station-pill-freq">${freqTag}</span>
+        <span class="station-pill-name font-medium">${station.name}</span>
+        ${isActive ? '<span class="w-1.5 h-1.5 rounded-full bg-current animate-pulse ml-0.5 shrink-0 opacity-90"></span>' : ''}
       `;
       btn.addEventListener('click', () => {
         window.musicPlayer.setStation(station.id);
@@ -8078,21 +8338,36 @@ document.addEventListener('DOMContentLoaded', () => {
       const isCurrent = window.musicPlayer.currentTrack && window.musicPlayer.currentTrack.id === track.id;
       const originalIndex = activeStation.tracks.findIndex(t => t.id === track.id);
 
+      const trackNum = String(originalIndex + 1).padStart(2, '0');
+      const isSaloon = currentMode === 'saloon';
+      const activeAccentColor = isSaloon ? 'text-teal-300' : 'text-amber-300';
+      const activeBorder = isSaloon ? 'border-teal-400/40 bg-teal-500/10' : 'border-amber-400/40 bg-amber-500/10';
+
       const item = document.createElement('div');
-      item.className = `flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer ${
-        isCurrent ? 'bg-white/10 border border-white/20 shadow-md' : 'hover:bg-white/5 border border-transparent'
+      item.className = `flex items-center justify-between p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer ${
+        isCurrent ? `${activeBorder} border shadow-lg` : 'hover:bg-white/5 border border-transparent'
       }`;
       item.innerHTML = `
         <div class="flex items-center gap-3 min-w-0 flex-1">
-          <div class="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-zinc-900 border border-white/10">
-            <img src="${track.thumb}" alt="${track.title}" class="w-full h-full object-cover"/>
-            ${isCurrent ? '<div class="absolute inset-0 bg-black/50 flex items-center justify-center text-amber-400"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>' : ''}
+          <span class="text-[11px] font-mono ${isCurrent ? activeAccentColor : 'text-zinc-500'} w-5 shrink-0 text-right font-semibold">${trackNum}</span>
+          <div class="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-zinc-900 border border-white/10 shadow-sm">
+            <img src="${track.thumb}" alt="${track.title}" class="w-full h-full object-cover" loading="lazy"/>
+            ${isCurrent ? '<div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>' : ''}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="font-semibold text-xs sm:text-sm text-white truncate ${isCurrent ? 'text-amber-300' : ''}">
-              ${track.title}
+            <div class="flex items-center gap-1.5">
+              <span class="font-semibold text-xs sm:text-sm text-white truncate ${isCurrent ? activeAccentColor : ''}">
+                ${track.title}
+              </span>
+              ${isCurrent ? `
+                <div class="flex items-end gap-0.5 h-3 ml-1 shrink-0" aria-label="Now Playing">
+                  <span class="w-0.5 h-3 rounded-full ${isSaloon ? 'bg-teal-400' : 'bg-amber-400'} animate-pulse"></span>
+                  <span class="w-0.5 h-2 rounded-full ${isSaloon ? 'bg-teal-300' : 'bg-amber-300'} animate-bounce"></span>
+                  <span class="w-0.5 h-3 rounded-full ${isSaloon ? 'bg-teal-400' : 'bg-amber-400'} animate-pulse"></span>
+                </div>
+              ` : ''}
             </div>
-            <div class="text-[11px] text-zinc-400 truncate">
+            <div class="text-[11px] text-zinc-400 truncate mt-0.5">
               ${track.artist} • ${track.movie}
             </div>
           </div>
